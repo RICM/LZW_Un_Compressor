@@ -4,6 +4,7 @@ Repository for LZW Compressor - Uncompressor
 ### TODO :
 
 ### DONE :
+* Structure definition
 
 ### @author :
 * HALLAL Marwan
