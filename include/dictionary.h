@@ -13,7 +13,7 @@ typedef Tree Dictionary[259];
 // List of code bound to Tree
 typedef struct decode_map_t{
 	uint16_t code;
-	Tree *sequence;
+	pSequence sequence;
 	struct decode_map_t *succ;
 } DecodeMap;
 
