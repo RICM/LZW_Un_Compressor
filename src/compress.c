@@ -1,15 +1,19 @@
 #include "compress.h"
 
-/*
-w = Nul;
-   tant que (lecture d'un caractère c) faire
-       si (w + c existe dans le dictionnaire) alors
-           w = w + c;
-       sinon
-           ajouter w + c au dictionnaire;
-           écrire le code de w;
-           w = c;
-       fin si
-   fin tant que
-   écrire le code de w;
-*/
+void compress(){
+  pSequence w = NULL;
+  pSequence tmp;
+  uint8_t c;
+
+  while(/*lecture de c*/){
+    tmp = add_to_tail(w, c);
+    if(isPresentEncode(tmp) && w != NULL)
+      w = tmp;
+    else{
+      add_to_dictionary(d, tmp);
+      // write w
+      w = add_to_tail(NULL, c);
+    }
+  }
+  // write w
+}
