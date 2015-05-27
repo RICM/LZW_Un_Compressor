@@ -9,3 +9,9 @@ typedef struct seq_t{
 } Sequence;
 
 typedef Sequence *pSequence;
+
+void print_sequence(pSequence seq);
+
+pSequence add_to_tail(pSequence seq, uint8_t elem);
+
+void freeSequenceList(pSequence seq);

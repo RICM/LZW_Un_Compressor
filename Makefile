@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw_compress
+EXEC = lzw_compress test_sequence
 DEBUG = 0
 
 DIR_INCLUDE = include/
@@ -20,6 +20,11 @@ LIBS = -ltokenize
 #-------------------------------------------------
 all: $(EXEC)
 
+test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	@echo -e
+
 lzw_compress: $(DIR_TGT)main.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $<
@@ -28,6 +33,16 @@ lzw_compress: $(DIR_TGT)main.o
 #-------------------------------------------------
 #                   DEPENDENCIES                  
 #-------------------------------------------------
+
+$(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)sequence.o: $(DIR_SRC)sequence.c $(DIR_INCLUDE)sequence.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
 
 #--------------
 #    Global	
