@@ -4,9 +4,9 @@
 
 #include "sequence.h"
 
-uint8_t increment = 256;
-uint8_t eof = 257;
-uint8_t clean_dic = 258;
+uint16_t increment = 256;
+uint16_t eof = 257;
+uint16_t clean_dic = 258;
 
 typedef Tree Dictionary[259];
 
