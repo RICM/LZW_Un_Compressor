@@ -19,5 +19,5 @@ typedef struct decode_map_t{
 
 typedef DecodeMap *pDecodeMap
 
-int isPresentEncode(pSequence w);
-int isPresentDecode(uint16_t code);
+Tree isPresentEncode(pSequence w);
+Tree isPresentDecode(uint16_t code);
