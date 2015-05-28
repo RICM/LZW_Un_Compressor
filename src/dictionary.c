@@ -1,33 +1,66 @@
 #include "dictionary.h"
 
 /* Function used to know if a sequence matches */
-int isPresentEncode(pSequence seq){
+Tree isPresentEncode(pSequence seq){
+	if (seq == NULL)
+		return NULL;
 	pSequence w = seq;
-	int ispresent = 1;
+	Tree ispresent = NULL;
 	Tree left = Dictionary[w->elem];
+	uint8_t current = w->elem;
 	Tree right = NULL;
-	int ok = 0;
+	int ok = 1;
 	while (w->succ != NULL && ok == 1){
 		w = w->succ;
-		right_tree = findElementLeft(initial_tree)->right;
+		right = findElementLeft(left, w->elem)->right;
 		if (right_tree != NULL){
-			left_tree = ispresenttreeright;
-			ok = 1;
+			if (w->succ == NULL){
+				ok = 1;
+				return right;
+			} else {
+				ok = 1;
+				w = w->succ;
+				left = findElementRight(right, w->elem)->left;
+			}
 		}
 		else{
 			ok = 0;
 		}
 	}
-	return ok;
+	return ispresent;
 }
 
+/* Si trouve l'élément dans la partie gauche d'un arbre bin, renvoie l'arbre*/
 Tree findElementLeft(Tree t, uint8_t elemToFind){
 	int trouve = O;
-	Tree toreturn;
-	while (trouve == 0 && t != null){
-		if (t->)
+	Tree toreturn == NULL;
+	while (trouve == 0 && t != null && t->ascii <= elemToFind){
+		if (t->ascii == elemToFind){
+			trouve = 1;
+			toreturn = t;
+		} else {
+			t = t->left;
+		}
 	}
+	return toreturn;
 }
+
+/* Si trouve l'élément dans la partie droite d'un arbre bin, renvoie l'arbre*/
+Tree findElementRight(Tree t, uint8_t elemToFind){
+	int trouve = O;
+	Tree toreturn == NULL;
+	while (trouve == 0 && t != null && t->ascii <= elemToFind){
+		if (t->ascii == elemToFind){
+			trouve = 1;
+			toreturn = t;
+		} else {
+			t = t->right;
+		}
+	}
+	return toreturn;
+}
+
+
 
 /* Function used to know if a sequence matches */
 int isPresentDecode(uint16_t code){
