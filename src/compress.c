@@ -7,7 +7,7 @@ void compress(){
 
   while(/*lecture de c*/){
     tmp = add_to_tail(w, c);
-    if(isPresentEncode(tmp) && w != NULL)
+    if(isPresentEncode(tmp) != NULL && w != NULL)
       w = tmp;
     else{
       add_to_dictionary(d, tmp);
