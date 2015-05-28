@@ -2,11 +2,16 @@
 #include "binrw.h"
 
 Buffer buf;
+Buffer bufW;
 uint8_t eof = 0;
+uint8_t first = 1;
 
 void initBuffer(){
 	buf.data = 0;
 	buf.remain = 0;
+
+	bufW.data = 0;
+	bufW.remain = 0;
 }
 
 uint16_t readBin(FILE *f, uint8_t nBits){	
@@ -69,6 +74,58 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 	}
 	buf.data = buf_tmp.data;
 	return out;
+}
+
+void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
+	printf("Write !\n");
+	Buffer bufW_tmp;
+	uint8_t write_tmp;
+
+	// for decoding
+	if(nBits == 8){
+		bufW.data = toWrite;
+		bufW.remain = 0;
+		displayBinary(toWrite);
+		fputc(toWrite, f);
+	}// for encoding
+	else{
+		printf("Buffer pred : "); displayBinary(bufW.data);
+		bufW_tmp.data = toWrite;
+		bufW_tmp.remain = nBits;
+		printf("New buffer : "); displayBinary(bufW_tmp.data);
+
+		write_tmp = 0;
+
+		// ecriture de ce qu'il y a dans le buffer précédent
+		write_tmp |= bufW.data << (8-bufW.remain) | bufW_tmp.data >> (nBits-(8-bufW.remain));
+		bufW_tmp.remain = bufW_tmp.remain - (8-bufW.remain);
+		printf("Remain : %d\n", bufW_tmp.remain);
+		printf("A afficher : ");displayBinary(write_tmp);
+
+		while(bufW_tmp.remain >= 8){
+			write_tmp = 0;
+			write_tmp |= bufW_tmp.data >> (8-bufW_tmp.remain);
+			bufW_tmp.remain -= 8;
+			printf("Remain : %d\n", bufW_tmp.remain);
+			printf("A afficher : ");displayBinary(write_tmp);
+		}
+
+		bufW.data = 0;
+		bufW.remain = 0;
+
+		if(isFinal){
+			while(bufW.remain > 0){
+				write_tmp = 0;
+				// assemble previous buffer to new
+				write_tmp |= bufW.data << (8-bufW.remain);
+
+				printf("Remain : %d\n", bufW.remain);
+				printf("A afficher : ");displayBinary(write_tmp);
+			}
+		}
+		bufW.data = bufW_tmp.data;
+		bufW.remain = bufW_tmp.remain;
+	}
 }
 
 uint8_t binEOF(){
