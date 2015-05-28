@@ -59,7 +59,7 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 		if (right != NULL && w->succ != NULL){
 			w = w->succ;
 			toTest = findElementRight(right, w->elem);
-			if (toTest != NULL){
+			if (toTest != NULL){	
 				if (w->succ == NULL){
 					ispresent = toTest;
 				}else{
