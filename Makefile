@@ -30,9 +30,9 @@ lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
 	$(CC) -o $(DIR_TGT)$@ $<
 	@echo -e
 
-test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o
+test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo -e
 
 #-------------------------------------------------
@@ -44,7 +44,7 @@ $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-$(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h $(DIR_INCLUDE)tree.h
+$(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h $(DIR_INCLUDE)tree.h $(DIR_INCLUDE)sequence.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e

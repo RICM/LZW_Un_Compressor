@@ -18,4 +18,6 @@ typedef tree *pTree;
 
 pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right);
 
+void print_tree(pTree tree);
+
 #endif
