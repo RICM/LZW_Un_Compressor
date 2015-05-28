@@ -1,5 +1,5 @@
 #-------------------------------------------------
-#                    VARIABLES                    
+#                    VARIABLES
 #-------------------------------------------------
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
@@ -16,7 +16,7 @@ LFLAGS = -L$(DIR_LIB)
 LIBS = -ltokenize
 
 #-------------------------------------------------
-#                     LINKINGS                    
+#                     LINKINGS
 #-------------------------------------------------
 all: $(EXEC)
 
@@ -32,11 +32,11 @@ lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
 
 test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o
 	@echo -e
 
 #-------------------------------------------------
-#                   DEPENDENCIES                  
+#                   DEPENDENCIES
 #-------------------------------------------------
 
 $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
@@ -44,7 +44,7 @@ $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-$(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h
+$(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h $(DIR_INCLUDE)tree.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
@@ -65,7 +65,7 @@ $(DIR_TGT)tree.o: $(DIR_SRC)tree.c $(DIR_INCLUDE)tree.h
 	@echo -e
 
 #--------------
-#    Global	
+#    Global
 #--------------
 $(DIR_TGT)%.o: $(DIR_SRC)%.c
 	@echo ------------- Generating $@ -------------
@@ -73,9 +73,8 @@ $(DIR_TGT)%.o: $(DIR_SRC)%.c
 	@echo -e
 
 #-------------------------------------------------
-#                     CLEANING                    
+#                     CLEANING
 #-------------------------------------------------
 
 clean:
 	rm -f $(DIR_TGT)*
-	
