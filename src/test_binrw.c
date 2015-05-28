@@ -6,7 +6,7 @@
 int main (int argc, char **argv){
 
 	FILE *file;
-	file = fopen(argv[1], "r");
+	file = fopen(argv[1], "rb");
 
 	if(!file){
         fprintf(stderr, "Error : file is inaccessible.\n");
