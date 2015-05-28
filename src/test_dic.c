@@ -17,12 +17,21 @@ int main (int argc, char **argv){
 	uint8_t el3 = 10;
 	uint8_t el4 = 7;
 	uint8_t el5 = 50;
+	//uint8_t el6 = 90;
 	pSequence sequence = add_to_tail(seq, el);
 	sequence = add_to_tail(sequence, el2);
 	sequence = add_to_tail(sequence, el3);
 	sequence = add_to_tail(sequence, el4);
-	sequence = add_to_tail(sequence, el5);
+	pSequence sequence2 = add_to_tail(seq, el);
+	sequence2 = add_to_tail(sequence2, el2);
+	sequence2 = add_to_tail(sequence2, el3);
+	sequence2 = add_to_tail(sequence2, el4);
+	sequence2 = add_to_tail(sequence2, el5);
+	printf("Sequence 1 :\n");
 	print_sequence(sequence);
+	printf("\nSequence 2 :\n");
+	print_sequence(sequence2);
+	printf("\n");
 	if (sequence == NULL)
 		printf("Seq is null\n");
 	pTree test = isPresentEncode(sequence, Dictionary);
@@ -32,4 +41,10 @@ int main (int argc, char **argv){
 	}
 	else
 		printf("Not Found Bitch !\n");
+	printf("Adding to tree\n");
+	pTree test2 = insertSeqTree(sequence2, Dictionary);
+	if (test2 != NULL){
+		printf("Printing tree\n");
+		print_tree(test2);
+	}
 }

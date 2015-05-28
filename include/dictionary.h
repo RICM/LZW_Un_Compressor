@@ -12,7 +12,7 @@
 //uint16_t eof = 257;
 //uint16_t clean_dic = 258;
 
-#define increment 256
+//#define increment 259
 #define eof 257
 #define clean_dic 258
 
@@ -26,7 +26,7 @@ typedef struct decode_map_t{
 } DecodeMap;
 
 typedef DecodeMap *pDecodeMap;
-
+pTree insertSeqTree(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
 #endif
