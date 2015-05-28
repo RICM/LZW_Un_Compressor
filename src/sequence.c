@@ -3,12 +3,10 @@
 
 void print_sequence(pSequence seq){
 	pSequence tmp = seq;
-	printf("Sequence : ");
 	while(tmp != NULL){
 		printf("%d ", tmp->elem);
 		tmp = tmp->succ;
 	}
-	printf("\n");
 }
 
 pSequence add_to_tail(pSequence seq, uint8_t elem){
@@ -27,11 +25,11 @@ pSequence add_to_tail(pSequence seq, uint8_t elem){
 	}
 }
 
-void freeSequenceList(pSequence seq){
+void freeSequenceList(pSequence *seq){
 	pSequence tmp;
-	while(seq != NULL){
-		tmp = seq;
-		seq = seq->succ;
+	while(*seq != NULL){
+		tmp = *seq;
+		*seq = (*seq)->succ;
 		free(tmp);
 	}
 }
