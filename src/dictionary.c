@@ -4,12 +4,10 @@
 pTree findElementLeft(pTree t, uint8_t elemToFind){
 	int trouve = 0;
 	pTree toReturn = NULL;
-	printf("elemToFind = %d, first elem = %d\n", elemToFind, t->ascii);
 	while (trouve == 0 && t != NULL && t->ascii <= elemToFind){
 		if (t->ascii == elemToFind){
 			trouve = 1;
 			toReturn = t;
-			printf("elem trouvé\n");
 		} else {
 			t = t->left;
 		}
@@ -26,7 +24,7 @@ pTree findElementRight(pTree t, uint8_t elemToFind){
 			trouve = 1;
 			toReturn = t;
 		} else {
-			t = t->right;
+			t = t->left;
 		}
 	}
 	return toReturn;
@@ -40,7 +38,6 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 	pSequence w = seq;
 	pTree ispresent = NULL;
 	pTree toTest = NULL;
-	printf("valeur de w->elem = %d\n", w->elem);
 	pTree left = dic[w->elem];
 	if (w->succ == NULL){
 		return left;
@@ -51,22 +48,23 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 		w = w->succ;
 		toTest = findElementLeft(left, w->elem);
 		if (toTest != NULL){
-			printf("to test n'est pas nul\n");
 			if (w->succ == NULL){
 				ispresent = toTest;
 			}else{
 				right = toTest->right;
-				printf("ispresent a été mis à right\n");
 			}
 		}else{ 
 			ok = 0;
 		}
 		if (right != NULL && w->succ != NULL){
-			printf("on rentre dans le if\n");
 			w = w->succ;
 			toTest = findElementRight(right, w->elem);
 			if (toTest != NULL){
-				left = toTest->left;
+				if (w->succ == NULL){
+					ispresent = toTest;
+				}else{
+					left  = toTest->right;
+				}
 			} else {
 				ok = 0;
 			}
@@ -74,7 +72,6 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 		else{
 			ok = 0;
 		}
-		printf("OK vaut %d\n",ok );
 	}
 	return ispresent;
 }
