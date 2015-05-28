@@ -7,6 +7,7 @@ Repository for LZW Compressor - Uncompressor
 * Structure definition
 * Implementation of Sequence struct
 * Implementation of Compression algo
+* Implementation of Tree 
 
 ### @author :
 * HALLAL Marwan
