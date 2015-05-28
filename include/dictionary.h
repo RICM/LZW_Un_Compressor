@@ -29,4 +29,6 @@ typedef DecodeMap *pDecodeMap;
 
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
+pTree est_dans_dico(pSequence seq, pTree t);
+
 #endif
