@@ -4,15 +4,13 @@
 
 typedef struct tree_t tree;
 
-typedef tree *pTree;
-
 struct tree_t{
 	uint8_t ascii;
 	uint16_t code;
-	pTree left;
-	pTree right;
+	struct tree_t* left;
+	struct tree_t* right;
 };
 
-
+typedef tree *pTree;
 
 pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right);
