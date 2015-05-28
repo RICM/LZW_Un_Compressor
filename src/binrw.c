@@ -1,44 +1,84 @@
 
 #include "binrw.h"
 
-uint8_t buf = 0;
-uint8_t nBitsUtil = 0;
+Buffer buf;
+uint8_t eof = 0;
+
+void initBuffer(){
+	buf.data = 0;
+	buf.remain = 0;
+}
 
 uint16_t readBin(FILE *f, uint8_t nBits){	
-	uint8_t buf_tmp, mask;
+	Buffer buf_tmp;
+	uint8_t mask;
 	uint16_t out;
 
-	uint8_t nBitsToAdd = nBits;
+	// bits remaining to add	
+	int nBitsRemaining = nBits;
 
-	buf_tmp = fgetc(f);
+	// initialise temporary buffer
+	buf_tmp.data = fgetc(f);
+	buf_tmp.remain = 8;
 
+	//printf("Buffer local : \n\t"); displayBinary(buf.data);
+	//printf("Buffer courrant : \n\t"); displayBinary(buf_tmp.data);
+
+	// for encoding
 	if(nBits == 8){
-		out = buf;
-		buf = buf_tmp;
-	}
+		buf.data = buf_tmp.data;
+		out = buf.data;
+	}// for decoding
 	else{
+
+		// add the non-used bits inside the buffer
 		mask = 0;
-		for(int i=0; i<(8-nBitsUtil); i++)
-			buf &= 1 << i;
-		nBitsToAdd -= (8-nBitsUtil);
-		for(int i=0; i<nBitsToAdd; i++)
+		for(int i=0; i<buf.remain; i++)
 			mask |= 1 << i;
 
-		out = buf << nBitsToAdd;
-		out |= (mask & buf_tmp) << (16-nBitsUtil);
+		out = (buf.data & mask) << (nBits-buf.remain);
+		//printf("Ecriture avec buffer pred : \n\t"); displayBinary(out);
 
-		if(nBits - nBitsUtil - 8 > 0){
+		// add bits from current buffer
+		nBitsRemaining -= buf.remain;
 
-		} 
+		if(nBitsRemaining < 8){
+			out |= buf_tmp.data >> (8-nBitsRemaining);
+			buf.remain = 8-nBitsRemaining;
+		}
+		else{
+			out |= buf_tmp.data << (nBits-buf.remain-8);
+
+			nBitsRemaining -= 8;
+
+			// we have to read another octet
+			if(!feof(f) && nBitsRemaining > 0){
+				buf_tmp.data = fgetc(f);
+				out |= buf_tmp.data >> (8-nBitsRemaining);
+				buf.remain = 8-nBitsRemaining;
+			}
+			else if(feof(f))
+				eof = 1;
+			else{
+				buf_tmp.data = fgetc(f);
+				buf.remain = nBitsRemaining;
+			}
+		}
+		//printf("Ecriture avec nouveau buffer : \n\t"); displayBinary(out);
+		//printf("Buf remain : %d\n", buf.remain);
 	}
-	buf = buf_tmp;
+	buf.data = buf_tmp.data;
 	return out;
+}
+
+uint8_t binEOF(){
+	return eof;
 }
 
 /** Display a split binary representation of n. */
 void displayBinary(uint16_t n){
 	char tmp[16];
-	char s[16 + (16/4) + 1];
+	char s[20];
 	int i, j;
 
 	for(int i=0; i<16; i++)
@@ -54,13 +94,13 @@ void displayBinary(uint16_t n){
 	}
 
 	for(i=0; i<16; i++){
-		if(SIZE == 16 && (i == 1 || (i-1)%(5) == 0)){
+		if(i%4 == 0 && i!=0){
 			s[j] = '-';
 			j++;
 		}
 		s[j] = tmp[i];
 		j++;
 	}
-	s[16 + (16/4)] = '\0';
+	s[19] = '\0';
 	printf("%s\n", s);
 }
