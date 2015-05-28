@@ -30,6 +30,11 @@ lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
 	$(CC) -o $(DIR_TGT)$@ $<
 	@echo -e
 
+test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	@echo -e
+
 #-------------------------------------------------
 #                   DEPENDENCIES                  
 #-------------------------------------------------
@@ -39,12 +44,22 @@ $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
+$(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
 $(DIR_TGT)sequence.o: $(DIR_SRC)sequence.c $(DIR_INCLUDE)sequence.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-$(DIR_TGT)dictionary.o: $(DIR_SRC)dictionary.c $(DIR_INCLUDE)dictionary.h
+$(DIR_TGT)dictionary.o: $(DIR_SRC)dictionary.c $(DIR_INCLUDE)dictionary.h $(DIR_INCLUDE)tree.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)tree.o: $(DIR_SRC)tree.c $(DIR_INCLUDE)tree.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e

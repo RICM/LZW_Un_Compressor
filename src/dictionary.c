@@ -1,19 +1,48 @@
 #include "dictionary.h"
 
+/* Si trouve l'élément dans la partie gauche d'un arbre bin, renvoie l'arbre*/
+pTree findElementLeft(pTree t, uint8_t elemToFind){
+	int trouve = 0;
+	pTree toReturn = NULL;
+	while (trouve == 0 && t != NULL && t->ascii <= elemToFind){
+		if (t->ascii == elemToFind){
+			trouve = 1;
+			toReturn = t;
+		} else {
+			t = t->left;
+		}
+	}
+	return toReturn;
+}
+
+/* Si trouve l'élément dans la partie droite d'un arbre bin, renvoie l'arbre*/
+pTree findElementRight(pTree t, uint8_t elemToFind){
+	int trouve = 0;
+	pTree toReturn = NULL;
+	while (trouve == 0 && t != NULL && t->ascii <= elemToFind){
+		if (t->ascii == elemToFind){
+			trouve = 1;
+			toReturn = t;
+		} else {
+			t = t->right;
+		}
+	}
+	return toReturn;
+}
+
 /* Function used to know if a sequence matches */
-Tree isPresentEncode(pSequence seq){
+pTree isPresentEncode(pSequence seq, pTree dic[]){
 	if (seq == NULL)
 		return NULL;
 	pSequence w = seq;
-	Tree ispresent = NULL;
-	Tree left = Dictionary[w->elem];
-	uint8_t current = w->elem;
-	Tree right = NULL;
+	pTree ispresent = NULL;
+	pTree left = dic[w->elem];
+	pTree right = NULL;
 	int ok = 1;
 	while (w->succ != NULL && ok == 1){
 		w = w->succ;
 		right = findElementLeft(left, w->elem)->right;
-		if (right_tree != NULL){
+		if (right != NULL){
 			if (w->succ == NULL){
 				ok = 1;
 				return right;
@@ -26,49 +55,6 @@ Tree isPresentEncode(pSequence seq){
 		else{
 			ok = 0;
 		}
-	}
-	return ispresent;
-}
-
-/* Si trouve l'élément dans la partie gauche d'un arbre bin, renvoie l'arbre*/
-Tree findElementLeft(Tree t, uint8_t elemToFind){
-	int trouve = O;
-	Tree toreturn == NULL;
-	while (trouve == 0 && t != null && t->ascii <= elemToFind){
-		if (t->ascii == elemToFind){
-			trouve = 1;
-			toreturn = t;
-		} else {
-			t = t->left;
-		}
-	}
-	return toreturn;
-}
-
-/* Si trouve l'élément dans la partie droite d'un arbre bin, renvoie l'arbre*/
-Tree findElementRight(Tree t, uint8_t elemToFind){
-	int trouve = O;
-	Tree toreturn == NULL;
-	while (trouve == 0 && t != null && t->ascii <= elemToFind){
-		if (t->ascii == elemToFind){
-			trouve = 1;
-			toreturn = t;
-		} else {
-			t = t->right;
-		}
-	}
-	return toreturn;
-}
-
-
-
-/* Function used to know if a sequence matches */
-int isPresentDecode(uint16_t code){
-	pDecodeMap elem;
-	int ispresent = 0;
-	while (pDecodeMap->succ != NULL && ispresent = 0){
-		if (pDecodeMap->code == code)
-			ispresent = 1;
 	}
 	return ispresent;
 }

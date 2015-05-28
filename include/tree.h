@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-typedef struct tree_t{
+typedef struct tree_t tree;
+
+typedef tree *pTree;
+
+struct tree_t{
 	uint8_t ascii;
 	uint16_t code;
-	Tree* left;
-	Tree* right;
-} Tree;
+	pTree left;
+	pTree right;
+};
 
-bool isPresent()
+
+
+pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right);

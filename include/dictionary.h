@@ -3,12 +3,13 @@
 #include <stdint.h>
 
 #include "sequence.h"
+#include "tree.h"
 
 uint16_t increment = 256;
 uint16_t eof = 257;
 uint16_t clean_dic = 258;
 
-typedef Tree Dictionary[259];
+pTree Dictionary[259];
 
 // List of code bound to Tree
 typedef struct decode_map_t{
@@ -17,7 +18,7 @@ typedef struct decode_map_t{
 	struct decode_map_t *succ;
 } DecodeMap;
 
-typedef DecodeMap *pDecodeMap
+typedef DecodeMap *pDecodeMap;
 
-Tree isPresentEncode(pSequence w);
-Tree isPresentDecode(uint16_t code);
+pTree isPresentEncode(pSequence w, pTree dic[]);
+//Tree isPresentDecode(uint16_t code);
