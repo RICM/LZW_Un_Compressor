@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw test_sequence
+EXEC = lzw test_sequence test_dic test_binrw
 DEBUG = 0
 
 DIR_INCLUDE = include/
@@ -20,19 +20,24 @@ LIBS = -ltokenize
 #-------------------------------------------------
 all: $(EXEC)
 
-test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
-	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
-	@echo -e
-
 lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $<
 	@echo -e
 
+test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	@echo -e
+
 test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	@echo -e
+
+test_binrw: $(DIR_TGT)test_binrw.o $(DIR_TGT)binrw.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o
 	@echo -e
 
 #-------------------------------------------------
@@ -49,6 +54,11 @@ $(DIR_TGT)test_dic.o: $(DIR_SRC)test_dic.c $(DIR_INCLUDE)dictionary.h $(DIR_INCL
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
+$(DIR_TGT)test_binrw.o: $(DIR_SRC)test_binrw.c $(DIR_INCLUDE)binrw.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
 $(DIR_TGT)sequence.o: $(DIR_SRC)sequence.c $(DIR_INCLUDE)sequence.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
@@ -60,6 +70,11 @@ $(DIR_TGT)dictionary.o: $(DIR_SRC)dictionary.c $(DIR_INCLUDE)dictionary.h $(DIR_
 	@echo -e
 
 $(DIR_TGT)tree.o: $(DIR_SRC)tree.c $(DIR_INCLUDE)tree.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)binrw.o: $(DIR_SRC)binrw.c $(DIR_INCLUDE)binrw.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
