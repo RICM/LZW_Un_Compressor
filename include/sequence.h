@@ -1,6 +1,3 @@
-#ifndef _SEQUENCE_H
-#define _SEQUENCE_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -17,6 +14,4 @@ void print_sequence(pSequence seq);
 
 pSequence add_to_tail(pSequence seq, uint8_t elem);
 
-void freeSequenceList(pSequence *seq);
-
-#endif
+void freeSequenceList(pSequence seq);
