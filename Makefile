@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw_compress test_sequence
+EXEC = lzw test_sequence
 DEBUG = 0
 
 DIR_INCLUDE = include/
@@ -25,7 +25,7 @@ test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
 	@echo -e
 
-lzw_compress: $(DIR_TGT)main.o
+lzw: $(DIR_TGT)main.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $<
 	@echo -e
