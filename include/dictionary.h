@@ -21,4 +21,3 @@ typedef struct decode_map_t{
 typedef DecodeMap *pDecodeMap;
 
 pTree isPresentEncode(pSequence w, pTree dic[]);
-//Tree isPresentDecode(uint16_t code);
