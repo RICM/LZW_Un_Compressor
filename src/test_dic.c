@@ -16,10 +16,12 @@ int main (int argc, char **argv){
 	uint8_t el2 = 2;
 	uint8_t el3 = 10;
 	uint8_t el4 = 7;
+	uint8_t el5 = 50;
 	pSequence sequence = add_to_tail(seq, el);
 	sequence = add_to_tail(sequence, el2);
 	sequence = add_to_tail(sequence, el3);
 	sequence = add_to_tail(sequence, el4);
+	sequence = add_to_tail(sequence, el5);
 	print_sequence(sequence);
 	if (sequence == NULL)
 		printf("Seq is null\n");
