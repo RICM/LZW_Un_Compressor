@@ -6,6 +6,7 @@ CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
 EXEC = lzw test_sequence test_dic test_binrw
 DEBUG = 0
+DEBUG_BINRW_LEVEL = 0
 
 DIR_INCLUDE = include/
 DIR_SRC = src/
@@ -76,7 +77,7 @@ $(DIR_TGT)tree.o: $(DIR_SRC)tree.c $(DIR_INCLUDE)tree.h
 
 $(DIR_TGT)binrw.o: $(DIR_SRC)binrw.c $(DIR_INCLUDE)binrw.h
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CC) -o $@ -c $< $(CFLAGS) -DDEBUG_BINRW_LEVEL=$(DEBUG_BINRW_LEVEL)
 	@echo -e
 
 #--------------

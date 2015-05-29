@@ -9,7 +9,7 @@ typedef struct buf_t{
 
 void initBuffer();
 
-void displayBinary(uint16_t n);
+void displayBinary(uint16_t n, uint8_t nOctets);
 
 uint8_t binEOF();
 
