@@ -1,5 +1,11 @@
 #include "dictionary.h"
 
+void InitVar() {
+	increment = 256;
+	eof = 257;
+	clean_dic = 258;
+}
+
 /* Si trouve l'élément dans la partie gauche d'un arbre bin, renvoie l'arbre*/
 pTree findElementLeft(pTree t, uint8_t elemToFind){
 	int trouve = 0;
