@@ -11,6 +11,7 @@ typedef struct seq_t{
 typedef Sequence *pSequence;
 
 void print_sequence(pSequence seq);
+void print_sequence_char(pSequence seq);
 
 pSequence add_to_tail(pSequence seq, uint16_t elem);
 
