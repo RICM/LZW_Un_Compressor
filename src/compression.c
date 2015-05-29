@@ -43,7 +43,7 @@ void compress(FILE *fr, FILE *fw){
       else{
         printf("W vaut : "); print_sequence(w); printf("\n");
 
-        print_sequence(tmp); printf("\n");
+        printf("To add : "); print_sequence(tmp); printf("\n");
         test = add_to_dictionary(tmp, Dictionary);
 
         printf("Debug\n");
@@ -83,7 +83,19 @@ void compress(FILE *fr, FILE *fw){
       }
     }
   }
-  writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 1);
+  printf("Fin de fichier\n");
+  printf("W vaut : "); print_sequence(w); printf("\n");
+  if(w->succ == NULL){
+    writeBin(fw, w->elem, nBitsCode, 0);
+    printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+    printf("On ecrit : %d\n", w->elem);
+  }
+  else{
+    writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
+    printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+    printf("On ecrit : %d\n", isPresentEncode(w, Dictionary)->code);
+  }
+  writeBin(fw, eof, nBitsCode, 1);
 }
 
 void decompress(FILE *fr, FILE *fw){
