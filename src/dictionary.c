@@ -103,9 +103,10 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			  	}
 
 			  	else return temp;
-		  	}
-		 }
+			  }
+			}
   	}
+}
 
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
