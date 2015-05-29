@@ -25,11 +25,11 @@ pSequence add_to_tail(pSequence seq, uint8_t elem){
 	}
 }
 
-void freeSequenceList(pSequence seq){
+void freeSequenceList(pSequence *seq){
 	pSequence tmp;
-	while(seq != NULL){
-		tmp = seq;
-		seq = (seq)->succ;
+	while(*seq != NULL){
+		tmp = *seq;
+		*seq = (*seq)->succ;
 		free(tmp);
 	}
 }
