@@ -110,7 +110,7 @@ pTree est_dans_dico(pSequence seq, pTree t){
 
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
-	int increment = 259;
+	int increment = 259; // to be modified
 	pTree treeToReturn = treeToInsert;
 	pTree saveParent = NULL;
 	while(treeToReturn != NULL && treeToReturn->ascii < toInsert){
@@ -123,24 +123,25 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 		saveParent->left = newTree;
 		return newTree;
 	}else{
-		pTree newTree = createTree(toInsert, increment, treeToReturn->left, NULL);
+		pTree newTree = createTree(treeToReturn->ascii, treeToReturn->code, treeToReturn->left, treeToReturn->right);
+		treeToReturn->ascii=toInsert;
+		treeToReturn->code=increment;
+		treeToReturn->left=newTree;
+		treeToReturn->right=NULL;
 		increment++;
-		treeToReturn->left = newTree;
-		return newTree;
+		return treeToReturn;
 	}
 }
 
 /* Function used to insert a sequence */
 pTree insertSeqTree(pSequence seq, pTree dic[]){
-	printf("dans la fonction \n");
+	int increment = 259; // to be modified
 	if (seq->succ == NULL){
-		printf("dans le 1 er if\n" );
 		return dic[seq->elem];
 	}
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
 	if (toTest != NULL){
-		printf("dans le 2 eme if\n" );
 		return toTest;
 	}
 	toTest=dic[seq->elem];
@@ -151,17 +152,21 @@ pTree insertSeqTree(pSequence seq, pTree dic[]){
 		uint8_t seqAscii = seq->elem;
 		while(toTest != NULL && toTest->ascii < seqAscii){
 			toTest = toTest->left;
-			printf("iteration\n");
 		}
 		if (toTest->ascii == seqAscii && seq->succ != NULL){
 			seq = seq->succ;
 			if (toTest->right == NULL){
-				seqAscii = seq->elem;
-				printf("c'est null\n");
-				toTest = insertInTree(save, seqAscii);
-				return toTest;
+				pTree newTree = malloc(sizeof(tree));
+				newTree->ascii = seq->elem;
+				newTree->code = increment;
+				increment++;
+				newTree->left = NULL;
+				newTree->right = NULL;
+				toTest->right = newTree;
+				return newTree;
+			}else{
+				toTest = toTest->right;
 			}
-			toTest = toTest->right;
 		}else{
 			toTest = insertInTree(save, seqAscii);
 			ok = 0;
