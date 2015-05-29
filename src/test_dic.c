@@ -19,6 +19,7 @@ int main (int argc, char **argv){
 	uint8_t el4 = 7;
 	uint8_t el5 = 50;
 	uint8_t el6 = 70;
+	uint8_t el7 = 5;
 	pSequence sequence = add_to_tail(seq, el);
 	sequence = add_to_tail(sequence, el2);
 	sequence = add_to_tail(sequence, el3);
@@ -34,6 +35,11 @@ int main (int argc, char **argv){
 	sequence3 = add_to_tail(sequence3, el4);
 	sequence3 = add_to_tail(sequence3, el5);
 	sequence3 = add_to_tail(sequence3, el6);
+	pSequence sequence4 = add_to_tail(seq,el);
+	sequence4 = add_to_tail(sequence4, el2);
+	sequence4 = add_to_tail(sequence4, el7);
+
+
 
 	printf("Sequence 1 :\n");
 	print_sequence(sequence);
@@ -71,11 +77,17 @@ int main (int argc, char **argv){
 		printf("Printing tree\n");
 		print_tree(test2);
 	}
-
+	print_tree(Dictionary[1]);
 	pTree test3 = insertSeqTree(sequence3, Dictionary);
 	if (test3 != NULL){
 		printf("Printing tree\n");
 		print_tree(test3);
 	}
-	//print_tree(Dictionary[1]);
+	print_tree(Dictionary[1]);
+	pTree test4 = insertSeqTree(sequence4, Dictionary);
+	if (test4 != NULL){
+		printf("Printing tree\n");
+		print_tree(test4);
+	}
+	print_tree(Dictionary[1]);
 }
