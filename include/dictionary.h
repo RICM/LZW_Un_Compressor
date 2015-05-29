@@ -8,9 +8,11 @@
 #include "sequence.h"
 #include "tree.h"
 
-//uint16_t increment = 256;
-//uint16_t eof = 257;
-//uint16_t clean_dic = 258;
+uint16_t increment;
+uint16_t eof;
+uint16_t clean_dic;
+
+void InitVar();
 
 //#define increment 259
 #define eof 257
