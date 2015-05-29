@@ -91,6 +91,7 @@ void compress(FILE *fr, FILE *fw){
     printf("On ecrit : %d\n", isPresentEncode(w, Dictionary)->code);
   }
   writeBin(fw, eof, nBitsCode, 1);
+  printf("Nombre d'éléments dans le dico : %d\n", numberElemDic(Dictionary));
 }
 
 void decompress(FILE *fr, FILE *fw){

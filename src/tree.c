@@ -9,6 +9,12 @@ pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right){
 	return toReturn;
 }
 
+int numberElemTree(pTree tree){
+	if (tree == NULL)
+		return 0;
+	return (1+numberElemTree(tree->left)+numberElemTree(tree->right));
+}
+
 void print_tree(pTree tree){
 	if (tree == NULL)
 		printf("x\n");

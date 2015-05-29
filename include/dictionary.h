@@ -24,6 +24,7 @@ typedef struct decode_map_t{
 } DecodeMap;
 
 typedef DecodeMap *pDecodeMap;
+int numberElemDic(pTree dic[]);
 pTree add_to_dictionary(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
