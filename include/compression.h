@@ -6,3 +6,5 @@
 #include "binrw.h"
 
 void compress(FILE *fr, FILE *fw);
+
+void decompress(FILE *fr, FILE *fw);

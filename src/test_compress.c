@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "compress.h"
+#include "compression.h"
 
 int main (int argc, char **argv){
 	FILE *file, *file2;

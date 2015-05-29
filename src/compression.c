@@ -1,4 +1,4 @@
-#include "compress.h"
+#include "compression.h"
 
 int nBitsCode = 9;
 
