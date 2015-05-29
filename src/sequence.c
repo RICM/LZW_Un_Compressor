@@ -9,6 +9,14 @@ void print_sequence(pSequence seq){
 	}
 }
 
+void print_sequence_chat(pSequence seq){
+	pSequence tmp = seq;
+	while(tmp != NULL){
+		printf("%c ", tmp->elem);
+		tmp = tmp->succ;
+	}
+}
+
 pSequence add_to_tail(pSequence seq, uint16_t elem){
 	pSequence newSeq = malloc(sizeof(Sequence));
 	newSeq->elem = elem;
