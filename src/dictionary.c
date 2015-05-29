@@ -76,6 +76,37 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 	return ispresent;
 }
 
+/* Manipulation du dictionnaire */
+pTree est_dans_dico(pSequence seq, pTree t){
+	if (seq == NULL) {
+		return NULL;
+	}
+	else {
+		pSequence w = seq;
+		pTree temp = t;
+		if((temp == NULL)||(temp->ascii > w->elem)){
+			return NULL;
+		}
+		else {
+		  	if(w->elem != temp->ascii){
+			    if(w->succ == NULL) return temp;
+			    return est_dans_dico(w, temp->left);
+	  		}
+	  		else {
+			  	w=w->succ;
+			  	if (w != NULL)
+			  	{
+			  		if (temp->right != NULL)
+			  		return est_dans_dico(w, temp->right);
+			  		else
+			  			return NULL;
+			  	}
+
+			  	else return temp;
+			  }
+			}
+  	}
+}
 
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){

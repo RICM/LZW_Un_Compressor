@@ -26,8 +26,10 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 	buf_tmp.data = fgetc(f);
 	buf_tmp.remain = 8;
 
-	//printf("Buffer local : \n\t"); displayBinary(buf.data);
-	//printf("Buffer courrant : \n\t"); displayBinary(buf_tmp.data);
+	if(DEBUG_BINRW_LEVEL == 2){
+		printf("Local buffer: \t\t\t"); displayBinary(buf.data, 2);
+		printf("Current buffer: \t\t"); displayBinary(buf_tmp.data, 2);
+	}
 
 	// for encoding
 	if(nBits == 8){
@@ -42,7 +44,9 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 			mask |= 1 << i;
 
 		out = (buf.data & mask) << (nBits-buf.remain);
-		//printf("Ecriture avec buffer pred : \n\t"); displayBinary(out);
+		if(DEBUG_BINRW_LEVEL == 2){
+			printf("First phase - old buffer: \t"); displayBinary(out, 2);
+		}
 
 		// add bits from current buffer
 		nBitsRemaining -= buf.remain;
@@ -59,6 +63,11 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 			// we have to read another octet
 			if(!feof(f) && nBitsRemaining > 0){
 				buf_tmp.data = fgetc(f);
+
+				if(DEBUG_BINRW_LEVEL == 2){
+					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2);
+				}
+
 				out |= buf_tmp.data >> (8-nBitsRemaining);
 				buf.remain = 8-nBitsRemaining;
 			}
@@ -66,18 +75,27 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 				eof = 1;
 			else{
 				buf_tmp.data = fgetc(f);
+				if(DEBUG_BINRW_LEVEL == 2){
+					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2);
+				}
 				buf.remain = nBitsRemaining;
 			}
 		}
-		//printf("Ecriture avec nouveau buffer : \n\t"); displayBinary(out);
-		//printf("Buf remain : %d\n", buf.remain);
+		
+		if(DEBUG_BINRW_LEVEL == 2){
+			printf("Second phase - new buffer: \t"); displayBinary(out, 2);
+			printf("Nbits remainaing : \t%d\n", buf.remain);
+		}
+		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+			printf("Out: \t\t\t\t"); displayBinary(out, 2);
+			printf("\n");
+		#endif
 	}
 	buf.data = buf_tmp.data;
 	return out;
 }
 
 void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
-	printf("Write !\n");
 	Buffer bufW_tmp;
 	uint8_t write_tmp;
 
@@ -85,44 +103,71 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 	if(nBits == 8){
 		bufW.data = toWrite;
 		bufW.remain = 0;
-		displayBinary(toWrite);
+		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+			printf("To print: \t\t\t"); displayBinary(toWrite, 1);
+		#endif
 		fputc(toWrite, f);
 	}// for encoding
 	else{
-		printf("Buffer pred : "); displayBinary(bufW.data);
+
 		bufW_tmp.data = toWrite;
 		bufW_tmp.remain = nBits;
-		printf("New buffer : "); displayBinary(bufW_tmp.data);
+		
+		if(DEBUG_BINRW_LEVEL == 2){
+			printf("Buffer pred : \t\t\t"); displayBinary(bufW.data, 2);
+			printf("New buffer : \t\t\t"); displayBinary(bufW_tmp.data, 2);
+		}
 
 		write_tmp = 0;
 
 		// ecriture de ce qu'il y a dans le buffer précédent
 		write_tmp |= bufW.data << (8-bufW.remain) | bufW_tmp.data >> (nBits-(8-bufW.remain));
 		bufW_tmp.remain = bufW_tmp.remain - (8-bufW.remain);
-		printf("Remain : %d\n", bufW_tmp.remain);
-		printf("A afficher : ");displayBinary(write_tmp);
+
+		if(DEBUG_BINRW_LEVEL == 2)
+			printf("Remain: \t\t%d\n", bufW_tmp.remain);
+		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+			printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+		#endif
+
+		fputc(write_tmp, f);
+		
 
 		while(bufW_tmp.remain >= 8){
 			write_tmp = 0;
-			write_tmp |= bufW_tmp.data >> (8-bufW_tmp.remain);
+			write_tmp |= bufW_tmp.data >> (bufW_tmp.remain-8);
 			bufW_tmp.remain -= 8;
-			printf("Remain : %d\n", bufW_tmp.remain);
-			printf("A afficher : ");displayBinary(write_tmp);
-		}
 
-		bufW.data = 0;
-		bufW.remain = 0;
+			if(DEBUG_BINRW_LEVEL == 2)
+				printf("Remain : \t\t%d\n", bufW_tmp.remain);
+			#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+				printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+			#endif
+
+			fputc(write_tmp, f);
+		}
 
 		if(isFinal){
-			while(bufW.remain > 0){
+			if(bufW_tmp.remain > 0){
 				write_tmp = 0;
 				// assemble previous buffer to new
-				write_tmp |= bufW.data << (8-bufW.remain);
+				write_tmp |= bufW_tmp.data << (8-bufW_tmp.remain);
+				bufW_tmp.remain = 0;
 
-				printf("Remain : %d\n", bufW.remain);
-				printf("A afficher : ");displayBinary(write_tmp);
+				if(DEBUG_BINRW_LEVEL == 2)
+					printf("Remain: \t\t%d\n", bufW_tmp.remain);
+				#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+					printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+				#endif
+
+				fputc(write_tmp, f);
 			}
 		}
+
+		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
+			printf("\n");
+		#endif		
+
 		bufW.data = bufW_tmp.data;
 		bufW.remain = bufW_tmp.remain;
 	}
@@ -133,31 +178,34 @@ uint8_t binEOF(){
 }
 
 /** Display a split binary representation of n. */
-void displayBinary(uint16_t n){
-	char tmp[16];
-	char s[20];
+void displayBinary(uint16_t n, uint8_t nOctets){
+	char tmp[8*(nOctets)];
+	char s[10*(nOctets)];
 	int i, j;
 
-	for(int i=0; i<16; i++)
+	for(int i=0; i<8*nOctets; i++)
 		tmp[i] = '0';
 
 	i =0;
 	j = 0;
 	while (n) {
     	if (n & 1)
-        	tmp[16-1-i] = '1';
+        	tmp[8*nOctets-1-i] = '1';
     	n >>= 1;
     	i++;
 	}
 
-	for(i=0; i<16; i++){
+	for(i=0; i<8*nOctets; i++){
 		if(i%4 == 0 && i!=0){
-			s[j] = '-';
+			if(nOctets == 2 && i == 8)
+				s[j] = ' ';
+			else
+				s[j] = '-';
 			j++;
 		}
 		s[j] = tmp[i];
 		j++;
 	}
-	s[19] = '\0';
+	s[10*nOctets-1] = '\0';
 	printf("%s\n", s);
 }
