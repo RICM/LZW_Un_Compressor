@@ -85,6 +85,7 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 
 /* Manipulation du dictionnaire */
 pTree est_dans_dico(pSequence seq, pTree t){
+	printf("Est dans dico ?\n");
 	if (seq == NULL) {
 		return NULL;
 	}
@@ -95,8 +96,12 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			return NULL;
 		}
 		else {
+			printf("Temp ascii %d \n", temp->ascii);
 		  	if(w->elem != temp->ascii){
-			    if(w->succ == NULL) return temp;
+			    if(w->succ == NULL){
+			    	return NULL; // le bug est là !
+			    	// return temp; d'après antoine
+			    }
 			    return est_dans_dico(w, temp->left);
 	  		}
 	  		else {
@@ -110,8 +115,8 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			  	}
 
 			  	else return temp;
-			  }
 			}
+		}
   	}
 }
 
