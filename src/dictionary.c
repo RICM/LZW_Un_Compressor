@@ -156,7 +156,7 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	toTest=dic[seq->elem];
 	if (toTest == NULL){
 		pTree newTree = malloc(sizeof(tree));
-		newTree->ascii = seq->elem;
+		newTree->ascii = seq->succ->elem;
 		newTree->code = nextCode;
 		nextCode++;
 		newTree->left = NULL;
