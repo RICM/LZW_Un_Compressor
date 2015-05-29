@@ -9,7 +9,7 @@ void print_sequence(pSequence seq){
 	}
 }
 
-pSequence add_to_tail(pSequence seq, uint8_t elem){
+pSequence add_to_tail(pSequence seq, uint16_t elem){
 	pSequence newSeq = malloc(sizeof(Sequence));
 	newSeq->elem = elem;
 	newSeq->succ = NULL;
