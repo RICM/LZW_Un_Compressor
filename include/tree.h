@@ -17,7 +17,7 @@ struct tree_t{
 typedef tree *pTree;
 
 pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right);
-
+int numberElemTree(pTree tree);
 void print_tree(pTree tree);
 
 #endif

@@ -6,6 +6,14 @@ void InitVar() {
 	clean_dic = 258;
 }
 
+int numberElemDic(pTree dic[]){
+	int count = 0;
+	for (int i = 0; i<258; i++){
+		count = count+numberElemTree(dic[i])+1;
+	}
+	return count;
+}
+
 /* Si trouve l'élément dans la partie gauche d'un arbre bin, renvoie l'arbre*/
 pTree findElementLeft(pTree t, uint8_t elemToFind){
 	int trouve = 0;
