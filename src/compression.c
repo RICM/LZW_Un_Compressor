@@ -5,6 +5,7 @@ int nBitsCode = 9;
 void compress(FILE *fr, FILE *fw){
   pSequence w = NULL;
   pTree treePred = NULL; 
+  pTree test = NULL;
   pSequence tmp;
   uint8_t c;
 
@@ -33,8 +34,10 @@ void compress(FILE *fr, FILE *fw){
         printf("test\n");
         print_sequence(tmp);
         printf("\n");
-
-        add_to_dictionary(tmp, Dictionary);
+        test = add_to_dictionary(tmp, Dictionary);
+        if (test !=NULL){
+          printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
+        }
         printf("blablabug %d \n", w);
 
         // write w
@@ -50,6 +53,7 @@ void compress(FILE *fr, FILE *fw){
 
         w = add_to_tail(NULL, c);
         treePred = NULL;
+        printf("GOES TO NEXT\n");
       }
     }
   }
