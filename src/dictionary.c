@@ -59,7 +59,7 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 		if (right != NULL && w->succ != NULL){
 			w = w->succ;
 			toTest = findElementRight(right, w->elem);
-			if (toTest != NULL){
+			if (toTest != NULL){	
 				if (w->succ == NULL){
 					ispresent = toTest;
 				}else{
@@ -106,4 +106,62 @@ pTree est_dans_dico(pSequence seq, pTree t){
 		  	}
 		 }
   	}
+
+/* Function used to insert an entity in a tree */
+pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
+	int increment = 259;
+	pTree treeToReturn = treeToInsert;
+	if (treeToReturn == NULL)
+		printf("first if\n");
+		treeToReturn = createTree(toInsert, increment, NULL, NULL); // to replace nextCode
+		increment++;
+		//return treeToReturn;
+	while(treeToReturn != NULL && treeToReturn->ascii < toInsert){
+		treeToReturn = treeToReturn->left;
+	}
+	if(treeToReturn == NULL){
+		pTree newTree = createTree(toInsert, increment, NULL, NULL);
+		increment++;
+		treeToReturn->left = newTree;
+		return newTree;
+	}else{
+		pTree newTree = createTree(toInsert, increment, treeToReturn->left, NULL);
+		increment++;
+		treeToReturn->left = newTree;
+		return newTree;
+	}
+}
+
+/* Function used to insert a sequence */
+pTree insertSeqTree(pSequence seq, pTree dic[]){
+	if (seq->succ == NULL){
+		return dic[seq->elem];
+	}
+	pTree toTest = isPresentEncode(seq, dic);
+	pTree save = NULL;
+	if (toTest != NULL)
+		return toTest;
+	toTest=dic[seq->elem];
+	seq = seq->succ;
+	int ok = 1;
+	while (ok == 1){
+		save = toTest;
+		uint8_t seqAscii = seq->elem;
+		while(toTest != NULL && toTest->ascii < seqAscii){
+			toTest = toTest->left;
+		}
+		if (toTest->ascii == seqAscii && seq->succ != NULL){
+			seq = seq->succ;
+			if (toTest->right == NULL){
+				seqAscii = seq->elem;
+				toTest = insertInTree(save, seqAscii);
+				return toTest;
+			}
+			toTest = toTest->right;
+		}else{
+			toTest = insertInTree(save, seqAscii);
+			ok = 0;
+		}
+	}
+	return toTest;
 }
