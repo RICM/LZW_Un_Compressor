@@ -3,5 +3,6 @@
 #include <stdint.h>
 
 #include "dictionary.h"
+#include "binrw.h"
 
-void compress();
+void compress(FILE *fr, FILE *fw);

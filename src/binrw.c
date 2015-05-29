@@ -3,8 +3,7 @@
 
 Buffer buf;
 Buffer bufW;
-uint8_t eof = 0;
-uint8_t first = 1;
+uint8_t end_of_file = 0;
 
 void initBuffer(){
 	buf.data = 0;
@@ -72,7 +71,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 				buf.remain = 8-nBitsRemaining;
 			}
 			else if(feof(f))
-				eof = 1;
+				end_of_file = 1;
 			else{
 				buf_tmp.data = fgetc(f);
 				if(DEBUG_BINRW_LEVEL == 2){
@@ -174,7 +173,7 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 }
 
 uint8_t binEOF(){
-	return eof;
+	return end_of_file;
 }
 
 /** Display a split binary representation of n. */
