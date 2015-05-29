@@ -140,7 +140,7 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 }
 
 /* Function used to insert a sequence */
-pTree insertSeqTree(pSequence seq, pTree dic[]){
+pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	int increment = 259; // to be modified
 	if (seq->succ == NULL){
 		return dic[seq->elem];
