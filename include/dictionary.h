@@ -14,10 +14,6 @@ uint16_t clean_dic;
 
 void InitVar();
 
-//#define increment 259
-#define eof 257
-#define clean_dic 258
-
 pTree Dictionary[259];
 
 // List of code bound to Tree
