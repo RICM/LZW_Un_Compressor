@@ -25,6 +25,14 @@ pSequence add_to_tail(pSequence seq, uint16_t elem){
 	}
 }
 
+void copySequence(pSequence seq, pSequence *newSeq){
+	pSequence tmp = seq;
+	while(tmp != NULL){
+		*newSeq = add_to_tail(*newSeq, tmp->elem);
+		tmp = tmp->succ;
+	}
+}
+
 void freeSequenceList(pSequence *seq){
 	pSequence tmp;
 	while(*seq != NULL){

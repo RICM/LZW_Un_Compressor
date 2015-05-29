@@ -14,4 +14,6 @@ void print_sequence(pSequence seq);
 
 pSequence add_to_tail(pSequence seq, uint16_t elem);
 
+void copySequence(pSequence seq, pSequence *newSeq);
+
 void freeSequenceList(pSequence *seq);

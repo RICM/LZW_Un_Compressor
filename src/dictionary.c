@@ -38,6 +38,7 @@ pTree findElementRight(pTree t, uint8_t elemToFind){
 
 /* Function used to know if a sequence matches */
 pTree isPresentEncode(pSequence seq, pTree dic[]){
+
 	if (seq == NULL){
 		return NULL;
 	}
@@ -141,13 +142,11 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 /* Function used to insert a sequence */
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	printf("nextCode = %d\n", nextCode);
-	if (seq != NULL)
-		print_sequence(seq);printf("\n");
+	print_sequence(seq);
 	if (seq->succ == NULL){
-		printf("seq current = %d", seq->elem);
+		//printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
 	}
-	printf("blabla\n");
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
 	if (toTest != NULL){
@@ -166,14 +165,14 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	}
 	seq = seq->succ;
 	int ok = 1;
-	printf("lolooololo\n");
 	while (ok == 1){
 		save = toTest;
 		uint8_t seqAscii = seq->elem;
 		while(toTest != NULL && toTest->ascii < seqAscii){
 			toTest = toTest->left;
 		}
-		if (toTest->ascii == seqAscii && seq->succ != NULL){
+		printf("seq->succ %d\n", seq->succ );
+		if (seq->succ != NULL && toTest->ascii == seqAscii){
 			seq = seq->succ;
 			if (toTest->right == NULL){
 				pTree newTree = malloc(sizeof(tree));
