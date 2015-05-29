@@ -72,19 +72,19 @@ int main (int argc, char **argv){
 	*/
 
 	printf("Adding to tree\n");
-	pTree test2 = insertSeqTree(sequence2, Dictionary);
+	pTree test2 = add_to_dictionary(sequence2, Dictionary);
 	if (test2 != NULL){
 		printf("Printing tree\n");
 		print_tree(test2);
 	}
 	print_tree(Dictionary[1]);
-	pTree test3 = insertSeqTree(sequence3, Dictionary);
+	pTree test3 = add_to_dictionary(sequence3, Dictionary);
 	if (test3 != NULL){
 		printf("Printing tree\n");
 		print_tree(test3);
 	}
 	print_tree(Dictionary[1]);
-	pTree test4 = insertSeqTree(sequence4, Dictionary);
+	pTree test4 = add_to_dictionary(sequence4, Dictionary);
 	if (test4 != NULL){
 		printf("Printing tree\n");
 		print_tree(test4);
