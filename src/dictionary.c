@@ -1,5 +1,5 @@
 #include "dictionary.h"
-
+int nextCode = 259;
 void InitVar() {
 	increment = 256;
 	eof = 257;
@@ -116,7 +116,6 @@ pTree est_dans_dico(pSequence seq, pTree t){
 
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
-	int increment = 259; // to be modified
 	pTree treeToReturn = treeToInsert;
 	pTree saveParent = NULL;
 	while(treeToReturn != NULL && treeToReturn->ascii < toInsert){
@@ -124,24 +123,24 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 		treeToReturn = treeToReturn->left;
 	}
 	if(treeToReturn == NULL){
-		pTree newTree = createTree(toInsert, increment, NULL, NULL);
-		increment++;
+		pTree newTree = createTree(toInsert, nextCode, NULL, NULL);
+		nextCode++;
 		saveParent->left = newTree;
 		return newTree;
 	}else{
 		pTree newTree = createTree(treeToReturn->ascii, treeToReturn->code, treeToReturn->left, treeToReturn->right);
 		treeToReturn->ascii=toInsert;
-		treeToReturn->code=increment;
+		treeToReturn->code=nextCode;
 		treeToReturn->left=newTree;
 		treeToReturn->right=NULL;
-		increment++;
+		nextCode++;
 		return treeToReturn;
 	}
 }
 
 /* Function used to insert a sequence */
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
-	int increment = 259; // to be modified
+	printf("nextCode = %d\n", nextCode);
 	if (seq->succ == NULL){
 		return dic[seq->elem];
 	}
@@ -164,8 +163,8 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 			if (toTest->right == NULL){
 				pTree newTree = malloc(sizeof(tree));
 				newTree->ascii = seq->elem;
-				newTree->code = increment;
-				increment++;
+				newTree->code = nextCode;
+				nextCode++;
 				newTree->left = NULL;
 				newTree->right = NULL;
 				toTest->right = newTree;
