@@ -141,17 +141,32 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 /* Function used to insert a sequence */
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	printf("nextCode = %d\n", nextCode);
+	if (seq != NULL)
+		print_sequence(seq);printf("\n");
 	if (seq->succ == NULL){
+		printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
 	}
+	printf("blabla\n");
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
 	if (toTest != NULL){
 		return toTest;
 	}
 	toTest=dic[seq->elem];
+	if (toTest == NULL){
+		pTree newTree = malloc(sizeof(tree));
+		newTree->ascii = seq->elem;
+		newTree->code = nextCode;
+		nextCode++;
+		newTree->left = NULL;
+		newTree->right = NULL;
+		dic[seq->elem] = newTree;
+		return newTree;
+	}
 	seq = seq->succ;
 	int ok = 1;
+	printf("lolooololo\n");
 	while (ok == 1){
 		save = toTest;
 		uint8_t seqAscii = seq->elem;
