@@ -17,7 +17,7 @@ int main (int argc, char **argv){
 	uint8_t el3 = 10;
 	uint8_t el4 = 7;
 	uint8_t el5 = 50;
-	//uint8_t el6 = 90;
+	uint8_t el6 = 70;
 	pSequence sequence = add_to_tail(seq, el);
 	sequence = add_to_tail(sequence, el2);
 	sequence = add_to_tail(sequence, el3);
@@ -27,12 +27,21 @@ int main (int argc, char **argv){
 	sequence2 = add_to_tail(sequence2, el3);
 	sequence2 = add_to_tail(sequence2, el4);
 	sequence2 = add_to_tail(sequence2, el5);
+	pSequence sequence3 = add_to_tail(seq, el);
+	sequence3 = add_to_tail(sequence3, el2);
+	sequence3 = add_to_tail(sequence3, el3);
+	sequence3 = add_to_tail(sequence3, el4);
+	sequence3 = add_to_tail(sequence3, el5);
+	sequence3 = add_to_tail(sequence3, el6);
+
 	printf("Sequence 1 :\n");
 	print_sequence(sequence);
 	printf("\nSequence 2 :\n");
 	print_sequence(sequence2);
+	printf("\nSequence 3 :\n");
+	print_sequence(sequence3);
 	printf("\n");
-	if (sequence == NULL)
+	/*if (sequence == NULL)
 		printf("Seq is null\n");
 	pTree test = isPresentEncode(sequence, Dictionary);
 	if (test != NULL){
@@ -41,10 +50,17 @@ int main (int argc, char **argv){
 	}
 	else
 		printf("Not Found Bitch !\n");
+	*/
 	printf("Adding to tree\n");
 	pTree test2 = insertSeqTree(sequence2, Dictionary);
 	if (test2 != NULL){
 		printf("Printing tree\n");
 		print_tree(test2);
 	}
+	pTree test3 = insertSeqTree(sequence3, Dictionary);
+	if (test3 != NULL){
+		printf("Printing tree\n");
+		print_tree(test3);
+	}
+	//print_tree(Dictionary[1]);
 }
