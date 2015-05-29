@@ -41,9 +41,9 @@ test_binrw: $(DIR_TGT)test_binrw.o $(DIR_TGT)binrw.o
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o
 	@echo -e
 
-test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compress.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
+test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compress.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo -e
 
 #-------------------------------------------------
@@ -65,12 +65,12 @@ $(DIR_TGT)test_binrw.o: $(DIR_SRC)test_binrw.c $(DIR_INCLUDE)binrw.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-$(DIR_TGT)test_compress.o: $(DIR_SRC)test_compress.c $(DIR_INCLUDE)compress.h
+$(DIR_TGT)test_compress.o: $(DIR_SRC)test_compress.c $(DIR_INCLUDE)compression.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-$(DIR_TGT)compress.o: $(DIR_SRC)compress.c $(DIR_INCLUDE)compress.h $(DIR_INCLUDE)binrw.h $(DIR_INCLUDE)dictionary.h 
+$(DIR_TGT)compression.o: $(DIR_SRC)compression.c $(DIR_INCLUDE)compression.h $(DIR_INCLUDE)binrw.h $(DIR_INCLUDE)dictionary.h 
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
