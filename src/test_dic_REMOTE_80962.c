@@ -7,11 +7,10 @@ int main (int argc, char **argv){
 	pTree elem6 = createTree(7, 7, NULL, NULL);
 	pTree elem5 = createTree(10, 10, NULL, elem6);
 	pTree elem4 = createTree(4, 4, elem5, NULL);
-	pTree elem3 = createTree(3, 3, NULL, elem4);
-	pTree elem2 = createTree(2, 2, elem3, NULL);
-	pTree elem1 = createTree(1, 1, elem2, NULL);
-
-	Dictionary[1] = elem1;
+	pTree elem1 = createTree(3, 3, NULL, NULL);
+	pTree elem2 = createTree(2, 2, elem1, elem4);
+	pTree elem3 = createTree(1, 1, elem2, NULL);
+	Dictionary[1] = elem3;
 	pSequence seq = NULL;
 	uint8_t el = 1;
 	uint8_t el2 = 2;
@@ -51,27 +50,13 @@ int main (int argc, char **argv){
 	}
 	else
 		printf("Not Found Bitch !\n");
-
-	test = est_dans_dico(sequence->succ,Dictionary[1]->left);
-	if (result == 1)
-		printf("%s\n", "Trouvé par recur");
-	else
-		printf("%s\n", "Non trouvé par recur");*/
-	/*if (test != NULL){
-		printf("printing tree\n");
-		print_tree(test);
-	}
-	else
-		printf("goodbye\n");
 	*/
-
 	printf("Adding to tree\n");
 	pTree test2 = insertSeqTree(sequence2, Dictionary);
 	if (test2 != NULL){
 		printf("Printing tree\n");
 		print_tree(test2);
 	}
-
 	pTree test3 = insertSeqTree(sequence3, Dictionary);
 	if (test3 != NULL){
 		printf("Printing tree\n");

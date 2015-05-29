@@ -18,11 +18,16 @@ int main (int argc, char **argv){
 	uint8_t el3 = 10;
 	uint8_t el4 = 7;
 	uint8_t el5 = 50;
+<<<<<<< HEAD
+	//uint8_t el6 = 90;
+
+=======
 	uint8_t el6 = 70;
 	pSequence sequence = add_to_tail(seq, el);
 	sequence = add_to_tail(sequence, el2);
 	sequence = add_to_tail(sequence, el3);
 	sequence = add_to_tail(sequence, el4);
+>>>>>>> aym-dev
 	pSequence sequence2 = add_to_tail(seq, el);
 	sequence2 = add_to_tail(sequence2, el2);
 	sequence2 = add_to_tail(sequence2, el3);
@@ -51,31 +56,38 @@ int main (int argc, char **argv){
 	}
 	else
 		printf("Not Found Bitch !\n");
+<<<<<<< HEAD
+
 
 	test = est_dans_dico(sequence->succ,Dictionary[1]->left);
-	if (result == 1)
+	/*if (result == 1)
 		printf("%s\n", "Trouvé par recur");
 	else
 		printf("%s\n", "Non trouvé par recur");*/
-	/*if (test != NULL){
+	if (test != NULL){
 		printf("printing tree\n");
 		print_tree(test);
 	}
 	else
 		printf("goodbye\n");
-	*/
 
+=======
+	*/
+>>>>>>> aym-dev
 	printf("Adding to tree\n");
 	pTree test2 = insertSeqTree(sequence2, Dictionary);
 	if (test2 != NULL){
 		printf("Printing tree\n");
 		print_tree(test2);
 	}
+<<<<<<< HEAD
 
+=======
 	pTree test3 = insertSeqTree(sequence3, Dictionary);
 	if (test3 != NULL){
 		printf("Printing tree\n");
 		print_tree(test3);
 	}
 	//print_tree(Dictionary[1]);
+>>>>>>> aym-dev
 }

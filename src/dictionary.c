@@ -112,18 +112,15 @@ pTree est_dans_dico(pSequence seq, pTree t){
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 	int increment = 259;
 	pTree treeToReturn = treeToInsert;
-	if (treeToReturn == NULL)
-		printf("first if\n");
-		treeToReturn = createTree(toInsert, increment, NULL, NULL); // to replace nextCode
-		increment++;
-		//return treeToReturn;
+	pTree saveParent = NULL;
 	while(treeToReturn != NULL && treeToReturn->ascii < toInsert){
+		saveParent = treeToReturn;
 		treeToReturn = treeToReturn->left;
 	}
 	if(treeToReturn == NULL){
 		pTree newTree = createTree(toInsert, increment, NULL, NULL);
 		increment++;
-		treeToReturn->left = newTree;
+		saveParent->left = newTree;
 		return newTree;
 	}else{
 		pTree newTree = createTree(toInsert, increment, treeToReturn->left, NULL);
@@ -135,13 +132,17 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 
 /* Function used to insert a sequence */
 pTree insertSeqTree(pSequence seq, pTree dic[]){
+	printf("dans la fonction \n");
 	if (seq->succ == NULL){
+		printf("dans le 1 er if\n" );
 		return dic[seq->elem];
 	}
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
-	if (toTest != NULL)
+	if (toTest != NULL){
+		printf("dans le 2 eme if\n" );
 		return toTest;
+	}
 	toTest=dic[seq->elem];
 	seq = seq->succ;
 	int ok = 1;
@@ -150,11 +151,13 @@ pTree insertSeqTree(pSequence seq, pTree dic[]){
 		uint8_t seqAscii = seq->elem;
 		while(toTest != NULL && toTest->ascii < seqAscii){
 			toTest = toTest->left;
+			printf("iteration\n");
 		}
 		if (toTest->ascii == seqAscii && seq->succ != NULL){
 			seq = seq->succ;
 			if (toTest->right == NULL){
 				seqAscii = seq->elem;
+				printf("c'est null\n");
 				toTest = insertInTree(save, seqAscii);
 				return toTest;
 			}
