@@ -38,3 +38,5 @@ target/
 *~
 test1.txt
 test2.txt
+*.jpg
+*.mp4
