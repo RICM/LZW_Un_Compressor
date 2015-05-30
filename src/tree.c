@@ -26,3 +26,11 @@ void print_tree(pTree tree){
 		print_tree(tree->right);
 	}
 }
+
+void freeTree(pTree *tree){
+	if(*tree != NULL){
+		freeTree(&((*tree)->left));
+		freeTree(&((*tree)->right));
+		*tree = NULL;
+	}
+}

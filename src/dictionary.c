@@ -1,6 +1,6 @@
 #include "dictionary.h"
 
-void InitVar() {
+void initVar() {
 	increment = 256;
 	eof = 257;
 	clean_dic = 258;
@@ -207,4 +207,14 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		}
 	}
 	return toTest;
+}
+
+void freeDictionary(pTree dictionary[259]){
+	uint8_t b = 1;
+	for(int i=0; i<259; i++){
+		freeTree(&dictionary[i]);
+		b &= (dictionary[i] == NULL);
+	}
+	if(!b)
+		printf("Failed to free dictionary. Compression or decompression is compromised... Try again !\n");
 }

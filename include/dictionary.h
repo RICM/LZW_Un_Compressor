@@ -14,7 +14,7 @@ uint16_t clean_dic;
 
 uint16_t nextCode;
 
-void InitVar();
+void initVar();
 
 pTree Dictionary[259];
 
@@ -31,5 +31,7 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
 pTree est_dans_dico(pSequence seq, pTree t);
+
+void freeDictionary(pTree dictionary[259]);
 
 #endif

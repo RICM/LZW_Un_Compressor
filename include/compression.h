@@ -9,4 +9,4 @@ void compress(FILE *fr, FILE *fw);
 
 void decompress(FILE *fr, FILE *fw);
 
-void incrementNbits(uint16_t value);
+void incrementNbits(uint16_t value, FILE *fw);
