@@ -26,6 +26,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 	buf_tmp.remain = 8;
 
 	if(DEBUG_BINRW_LEVEL == 2){
+		printf("Number of bit remaining: \t\t%d\n", buf.remain);
 		printf("Local buffer: \t\t\t"); displayBinary(buf.data, 2);
 		printf("Current buffer: \t\t"); displayBinary(buf_tmp.data, 2);
 	}
@@ -68,7 +69,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 				}
 
 				out |= buf_tmp.data >> (8-nBitsRemaining);
-				buf.remain = 8-nBitsRemaining;
+				buf.remain = (8-nBitsRemaining == 0)? 8 : 8-nBitsRemaining;
 			}
 			else if(feof(f))
 				end_of_file = 1;
@@ -77,7 +78,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 				if(DEBUG_BINRW_LEVEL == 2){
 					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2);
 				}
-				buf.remain = nBitsRemaining;
+				buf.remain = (nBitsRemaining == 0)? 8 : nBitsRemaining;
 			}
 		}
 		

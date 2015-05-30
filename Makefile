@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw test_sequence test_dic test_binrw test_compress
+EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress
 DEBUG = 0
 DEBUG_BINRW_LEVEL = 0
 
@@ -46,6 +46,11 @@ test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compression.o $(DIR_TGT)dicti
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo -e
 
+test_decompress: $(DIR_TGT)test_decompress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	@echo -e
+
 #-------------------------------------------------
 #                   DEPENDENCIES
 #-------------------------------------------------
@@ -66,6 +71,11 @@ $(DIR_TGT)test_binrw.o: $(DIR_SRC)test_binrw.c $(DIR_INCLUDE)binrw.h
 	@echo -e
 
 $(DIR_TGT)test_compress.o: $(DIR_SRC)test_compress.c $(DIR_INCLUDE)compression.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)test_decompress.o: $(DIR_SRC)test_decompress.c $(DIR_INCLUDE)compression.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e

@@ -6,6 +6,7 @@ void initVar() {
 	clean_dic = 258;
 
 	nextCode = 259;
+	DecodeDictionary = NULL;
 }
 
 int numberElemDic(pTree dic[]){
@@ -158,6 +159,9 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	//printf("nextCode = %d\n", nextCode);
 	//print_sequence(seq);
+
+	DecodeDictionary = addToDecodeMap(seq, nextCode, DecodeDictionary);
+
 	if (seq->succ == NULL){
 		//printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
@@ -207,6 +211,33 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		}
 	}
 	return toTest;
+}
+
+pDecodeMap addToDecodeMap(pSequence seq, uint16_t code, pDecodeMap map){
+	pDecodeMap newMap = malloc(sizeof(DecodeMap));
+	newMap->code = code;
+	newMap->sequence = seq;
+	newMap->succ = NULL;
+
+	if(map == NULL)
+		return newMap;
+	else{
+		pDecodeMap tmp = map;
+		while(tmp->succ != NULL)
+			tmp = tmp->succ;
+		tmp->succ = newMap;
+		return map;
+	}
+}
+
+pSequence findCode(uint16_t code, pDecodeMap map){
+	pDecodeMap tmp = DecodeDictionary;
+	while(tmp != NULL && tmp->code != code)
+		tmp = tmp->succ;
+	if(tmp == NULL)
+		return NULL;
+	else
+		return tmp->sequence;
 }
 
 void freeDictionary(pTree dictionary[259]){
