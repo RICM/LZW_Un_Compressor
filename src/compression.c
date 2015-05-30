@@ -41,23 +41,24 @@ void compress(FILE *fr, FILE *fw){
       else{
         //printf("W vaut : "); print_sequence(w); printf("\n");
 
-        //printf("To add : "); print_sequence(tmp); printf("\n");
+        printf("To add : "); print_sequence(tmp); printf("\n");
         test = add_to_dictionary(tmp, Dictionary);
+        printf("prout\n");
 
         incrementNbits(nextCode-1, fw);
         
-        /*if (test !=NULL){
+        if (test !=NULL){
           printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
-        }*/
+        }
 
         if(w->succ == NULL){
           writeBin(fw, w->elem, nBitsCode, 0);
-          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+          printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
           printf("On ecrit : \t\t\t%d\n", w->elem);
         }
         else{
           writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
-          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+          printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
           printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
         }
 
