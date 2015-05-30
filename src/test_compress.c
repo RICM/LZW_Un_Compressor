@@ -8,6 +8,8 @@ int main (int argc, char **argv){
 	file = fopen(argv[1], "rb");
 	file2 = fopen(argv[2], "wb");
 
+    //incrementNbits(512);
+
 	if(!file || !file2){
         fprintf(stderr, "Error : file is inaccessible.\n");
         return 1;

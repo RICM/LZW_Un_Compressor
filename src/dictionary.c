@@ -1,9 +1,11 @@
 #include "dictionary.h"
-int nextCode = 259;
+
 void InitVar() {
 	increment = 256;
 	eof = 257;
 	clean_dic = 258;
+
+	nextCode = 259;
 }
 
 int numberElemDic(pTree dic[]){
@@ -93,7 +95,7 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 
 /* Manipulation du dictionnaire */
 pTree est_dans_dico(pSequence seq, pTree t){
-	printf("Est dans dico ?\n");
+	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
 		return NULL;
 	}
@@ -101,13 +103,13 @@ pTree est_dans_dico(pSequence seq, pTree t){
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
-			return NULL;
+			return 0;
 		}
 		else {
-			printf("Temp ascii %d \n", temp->ascii);
+			//printf("Temp ascii %d \n", temp->ascii);
 		  	if(w->elem != temp->ascii){
 			    if(w->succ == NULL){
-			    	return NULL; // le bug est là !
+			    	return temp; // le bug est là !
 			    	// return temp; d'après antoine
 			    }
 			    return est_dans_dico(w, temp->left);
@@ -117,12 +119,12 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			  	if (w != NULL)
 			  	{
 			  		if (temp->right != NULL)
-			  		return est_dans_dico(w, temp->right);
+			  			return est_dans_dico(w, temp->right);
 			  		else
 			  			return NULL;
 			  	}
-
-			  	else return temp;
+			  	else 
+			  		return temp;
 			}
 		}
   	}
@@ -154,8 +156,8 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 
 /* Function used to insert a sequence */
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
-	printf("nextCode = %d\n", nextCode);
-	print_sequence(seq);
+	//printf("nextCode = %d\n", nextCode);
+	//print_sequence(seq);
 	if (seq->succ == NULL){
 		//printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
@@ -184,7 +186,7 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		while(toTest != NULL && toTest->ascii < seqAscii){
 			toTest = toTest->left;
 		}
-		printf("seq->succ %d\n", seq->succ );
+		//printf("seq->succ %d\n", seq->succ );
 		if (seq->succ != NULL && toTest->ascii == seqAscii){
 			seq = seq->succ;
 			if (toTest->right == NULL){

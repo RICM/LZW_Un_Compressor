@@ -9,7 +9,7 @@ void print_sequence(pSequence seq){
 	}
 }
 
-void print_sequence_chat(pSequence seq){
+void print_sequence_char(pSequence seq){
 	pSequence tmp = seq;
 	while(tmp != NULL){
 		printf("%c ", tmp->elem);

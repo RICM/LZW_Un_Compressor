@@ -12,6 +12,8 @@ uint16_t increment;
 uint16_t eof;
 uint16_t clean_dic;
 
+uint16_t nextCode;
+
 void InitVar();
 
 pTree Dictionary[259];
