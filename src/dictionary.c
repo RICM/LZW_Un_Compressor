@@ -137,6 +137,17 @@ pTree findElemDico(pSequence seq, pTree dic[]){
 
 
 pTree addToDictionnary (pSequence seq, pTree dic[]){
+	pSequence elemToAdd = seq;
+	pSequence seqPrefixe = NULL;
+	int size = sizeSequence(seq);
+	for (int i = 0; i < size; ++i)
+	{
+		elemToAdd = elemToAdd->succ;
+	}
+	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
+	while (seqPrefixe != elemToAdd){
+		seqPrefixe = add_to_tail(seqPrefixe, uint16_t elem);
+	}
 	
 }
 

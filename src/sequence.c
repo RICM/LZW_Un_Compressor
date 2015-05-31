@@ -49,3 +49,13 @@ void freeSequenceList(pSequence *seq){
 		free(tmp);
 	}
 }
+
+int sizeSequence(pSequence seq){
+	if (seq == NULL)
+	{
+		return 0;
+	}
+	else {
+		return 1+sizeSequence(seq->succ);
+	}
+}
