@@ -27,8 +27,8 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 
 	if(DEBUG_BINRW_LEVEL == 2){
 		printf("Number of bit remaining: \t\t%d\n", buf.remain);
-		printf("Local buffer: \t\t\t"); displayBinary(buf.data, 2);
-		printf("Current buffer: \t\t"); displayBinary(buf_tmp.data, 2);
+		printf("Local buffer: \t\t\t"); displayBinary(buf.data, 2); printf("\n");
+		printf("Current buffer: \t\t"); displayBinary(buf_tmp.data, 2); printf("\n");
 	}
 
 	// for encoding
@@ -45,7 +45,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 
 		out = (buf.data & mask) << (nBits-buf.remain);
 		if(DEBUG_BINRW_LEVEL == 2){
-			printf("First phase - old buffer: \t"); displayBinary(out, 2);
+			printf("First phase - old buffer: \t"); displayBinary(out, 2); printf("\n");
 		}
 
 		// add bits from current buffer
@@ -65,7 +65,7 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 				buf_tmp.data = fgetc(f);
 
 				if(DEBUG_BINRW_LEVEL == 2){
-					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2);
+					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2); printf("\n");
 				}
 
 				out |= buf_tmp.data >> (8-nBitsRemaining);
@@ -76,18 +76,18 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 			else{
 				buf_tmp.data = fgetc(f);
 				if(DEBUG_BINRW_LEVEL == 2){
-					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2);
+					printf("New buffer: \t\t\t"); displayBinary(buf_tmp.data, 2); printf("\n");
 				}
 				buf.remain = (nBitsRemaining == 0)? 8 : nBitsRemaining;
 			}
 		}
 		
 		if(DEBUG_BINRW_LEVEL == 2){
-			printf("Second phase - new buffer: \t"); displayBinary(out, 2);
+			printf("Second phase - new buffer: \t"); displayBinary(out, 2); printf("\n");
 			printf("Nbits remainaing : \t%d\n", buf.remain);
 		}
 		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
-			printf("Out: \t\t\t\t"); displayBinary(out, 2);
+			printf("Out: \t\t\t\t"); displayBinary(out, 2); printf("\n");
 			printf("\n");
 		#endif
 	}
@@ -104,7 +104,7 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 		bufW.data = toWrite;
 		bufW.remain = 0;
 		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
-			printf("To print: \t\t\t"); displayBinary(toWrite, 1);
+			printf("To print: \t\t\t"); displayBinary(toWrite, 1); printf("\n");
 		#endif
 		fputc(toWrite, f);
 	}// for encoding
@@ -114,8 +114,8 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 		bufW_tmp.remain = nBits;
 		
 		if(DEBUG_BINRW_LEVEL == 2){
-			printf("Buffer pred : \t\t\t"); displayBinary(bufW.data, 2);
-			printf("New buffer : \t\t\t"); displayBinary(bufW_tmp.data, 2);
+			printf("Buffer pred : \t\t\t"); displayBinary(bufW.data, 2); printf("\n");
+			printf("New buffer : \t\t\t"); displayBinary(bufW_tmp.data, 2); printf("\n");
 		}
 
 		write_tmp = 0;
@@ -127,7 +127,7 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 		if(DEBUG_BINRW_LEVEL == 2)
 			printf("Remain: \t\t%d\n", bufW_tmp.remain);
 		#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
-			printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+			printf("To print: \t\t\t");displayBinary(write_tmp, 1); printf("\n");
 		#endif
 
 		fputc(write_tmp, f);
@@ -141,7 +141,7 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 			if(DEBUG_BINRW_LEVEL == 2)
 				printf("Remain : \t\t%d\n", bufW_tmp.remain);
 			#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
-				printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+				printf("To print: \t\t\t");displayBinary(write_tmp, 1); printf("\n");
 			#endif
 
 			fputc(write_tmp, f);
@@ -157,7 +157,7 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal){
 				if(DEBUG_BINRW_LEVEL == 2)
 					printf("Remain: \t\t%d\n", bufW_tmp.remain);
 				#if DEBUG_BINRW_LEVEL == 1 || DEBUG_BINRW_LEVEL == 2
-					printf("To print: \t\t\t");displayBinary(write_tmp, 1);
+					printf("To print: \t\t\t");displayBinary(write_tmp, 1); printf("\n");
 				#endif
 
 				fputc(write_tmp, f);
@@ -207,5 +207,5 @@ void displayBinary(uint16_t n, uint8_t nOctets){
 		j++;
 	}
 	s[10*nOctets-1] = '\0';
-	printf("%s\n", s);
+	printf("%s", s);
 }
