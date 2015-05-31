@@ -31,6 +31,11 @@ test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
 	@echo -e
 
+test_tree: $(DIR_TGT)test_tree.o $(DIR_TGT)tree.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)tree.o
+	@echo -e
+
 test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
@@ -56,6 +61,11 @@ test_decompress: $(DIR_TGT)test_decompress.o $(DIR_TGT)compression.o $(DIR_TGT)d
 #-------------------------------------------------
 
 $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)test_tree.o: $(DIR_SRC)test_tree.c $(DIR_INCLUDE)tree.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e

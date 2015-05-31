@@ -18,8 +18,8 @@ struct tree_t{
 typedef tree *pTree;
 
 pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right);
-pTree addLeft(uint8_t ascii, uint16_t code, pTree tree);
-pTree addRight(uint8_t ascii, uint16_t code, pTree tree);
+pTree insertLeft(uint8_t ascii, uint16_t code, pTree *tree);
+pTree insertRight(uint8_t ascii, uint16_t code, pTree *tree);
 
 int numberElemTree(pTree tree);
 void print_tree(pTree tree, uint8_t nTab);
