@@ -173,13 +173,9 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	}
 	toTest=dic[seq->elem];
 	if (toTest == NULL){
-		pTree newTree = malloc(sizeof(tree));
-		newTree->ascii = seq->succ->elem;
-		newTree->code = nextCode;
-		nextCode++;
-		newTree->left = NULL;
-		newTree->right = NULL;
+		pTree newTree = createTree(seq->succ->elem,nextCode,NULL,NULL);
 		dic[seq->elem] = newTree;
+		nextCode++;
 		return newTree;
 	}
 	seq = seq->succ;
@@ -194,12 +190,8 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		if (seq->succ != NULL && toTest->ascii == seqAscii){
 			seq = seq->succ;
 			if (toTest->right == NULL){
-				pTree newTree = malloc(sizeof(tree));
-				newTree->ascii = seq->elem;
-				newTree->code = nextCode;
+				pTree newTree = createTree(seq->elem,nextCode,NULL,NULL);
 				nextCode++;
-				newTree->left = NULL;
-				newTree->right = NULL;
 				toTest->right = newTree;
 				return newTree;
 			}else{
