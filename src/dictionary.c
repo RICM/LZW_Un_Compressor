@@ -178,6 +178,7 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		nextCode++;
 		return newTree;
 	}
+
 	seq = seq->succ;
 	int ok = 1;
 	while (ok == 1){

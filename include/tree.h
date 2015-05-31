@@ -11,8 +11,8 @@ typedef struct tree_t tree;
 struct tree_t{
 	uint8_t ascii; //Le code de la table ascii correspondant au carac
 	uint16_t code; //Le code de compression correspondant
-	struct tree_t* left;
-	struct tree_t* right;
+	struct tree_t* left; //Suite gauche
+	struct tree_t* right; //Suite droite
 };
 
 typedef tree *pTree;
