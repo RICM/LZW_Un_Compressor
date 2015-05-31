@@ -94,8 +94,8 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 	return ispresent;
 }
 
-/* Manipulation du dictionnaire */
-pTree est_dans_dico(pSequence seq, pTree t){
+/* Recursive research of a sequence inside the tree */
+pTree findElem(pSequence seq, pTree t){
 	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
 		return NULL;
@@ -110,8 +110,7 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			//printf("Temp ascii %d \n", temp->ascii);
 		  	if(w->elem != temp->ascii){
 			    if(w->succ == NULL){
-			    	return temp; // le bug est là !
-			    	// return temp; d'après antoine
+			    	return temp;
 			    }
 			    return est_dans_dico(w, temp->left);
 	  		}
@@ -129,6 +128,16 @@ pTree est_dans_dico(pSequence seq, pTree t){
 			}
 		}
   	}
+}
+
+/* Encapsulation of findElem. Simpler paramaters */
+pTree findElemDico(pSequence seq, pTree dic[]){
+	return findElem(seq->succ, dic[seq->elem]->left);
+}
+
+
+pTree addToDictionnary (pSequence seq, pTree dic[]){
+	
 }
 
 /* Function used to insert an entity in a tree */
