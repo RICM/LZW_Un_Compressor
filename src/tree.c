@@ -9,6 +9,18 @@ pTree createTree(uint8_t ascii, uint16_t code, pTree left, pTree right){
 	return toReturn;
 }
 
+pTree addLeft(uint8_t ascii, uint16_t code, pTree tree){
+	pTree toAdd = createTree(ascii, code, NULL, NULL);
+	tree->left = toAdd;
+	return tree;
+}
+
+pTree addRight(uint8_t ascii, uint16_t code, pTree tree){
+	pTree toAdd = createTree(ascii, code, NULL, NULL);
+	tree->right = toAdd;
+	return tree;
+}
+
 int numberElemTree(pTree tree){
 	if (tree == NULL)
 		return 0;
