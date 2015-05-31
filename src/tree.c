@@ -34,9 +34,9 @@ void printnTab(uint8_t nTab){
 
 void print_tree(pTree tree, uint8_t nTab){
 	if (tree == NULL)
-		printf("x\n");
+		printf("\tx\n");
 	else{	
-		printnTab(nTab); printf("%d | %d\n", tree->ascii, tree->code);
+		printf("\t%d | %d\n", tree->ascii, tree->code);
 		printnTab(nTab); printf("Fils gauche : ");
 		if(nTab == 8)
 			print_tree(tree->left, 1);
