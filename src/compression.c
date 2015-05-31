@@ -7,7 +7,8 @@ void compress(FILE *fr, FILE *fw){
   pTree treePred = NULL; 
   pTree test = NULL;
   pSequence tmp;
-  uint8_t c, pred = NULL;
+  uint8_t c;
+  int pred = -1;
 
   initVar();
 
@@ -17,8 +18,9 @@ void compress(FILE *fr, FILE *fw){
     c = readBin(fr, 8);
 
     //printf("Caractere lu : \t%c\n", c);
+    printf("%d\n", c);
 
-    if(c != 255){
+    //if(c != 255){
 
       // tmp = w.c
       tmp = NULL;
@@ -27,39 +29,47 @@ void compress(FILE *fr, FILE *fw){
       //printf("w.c vaut : "); print_sequence(tmp); printf("\n");
 
       // if w as not already been found
-      if(treePred != NULL && pred != NULL)
-        treePred = est_dans_dico(add_to_tail(add_to_tail(NULL, pred), c), treePred);
+      //printf("treePred %d\n", treePred);
+      //printf("pred %d\n", pred);
+      if(treePred != NULL && pred > -1){
+        //printf("\ntreePred : \n");
+        //print_tree(treePred, 0);
+
+        //printf("\nSequence : \n"); print_sequence(add_to_tail(add_to_tail(NULL, pred), c)); printf("\n");
+        treePred = findElem(add_to_tail(add_to_tail(NULL, pred), c), treePred);
+      }
       else{
+        //printf("isPresentEncode\n");
         treePred = isPresentEncode(tmp, Dictionary);
       }
 
       //printf("%d\n", treePred);
       if(treePred != NULL || w == NULL){ // w.c est present dans le dictionnaire
         w = tmp;
-        //printf("On a trouvé le caractere : "); print_sequence(w); printf("\n\n");
+        pred = c;
+        //printf("On a trouvé la sequence : "); print_sequence(w); printf("\n\n");
       }
       else{
         //printf("W vaut : "); print_sequence(w); printf("\n");
 
-        printf("To add : "); print_sequence(tmp); printf("\n");
+        //printf("To add : "); print_sequence(tmp); printf("\n");
         test = add_to_dictionary(tmp, Dictionary);
-        printf("prout\n");
 
         incrementNbits(nextCode-1, fw);
         
         if (test !=NULL){
-          printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
+          //printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
         }
 
         if(w->succ == NULL){
           writeBin(fw, w->elem, nBitsCode, 0);
-          printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          printf("On ecrit : \t\t\t%d\n", w->elem);
+          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+          //printf("On ecrit : \t\t\t%d\n", w->elem);
         }
         else{
           writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
-          printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
+          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
+          //printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
         }
 
         w = add_to_tail(NULL, c);
@@ -70,29 +80,29 @@ void compress(FILE *fr, FILE *fw){
 
       if(nextCode == 4096){
         // dictionary reset
-        nBitsCode = 9;
         writeBin(fw, clean_dic, nBitsCode, 0);
         freeDictionary(Dictionary);
         initVar();
+        nBitsCode = 9;
       }
-    }
+    //}
   }
-  printf("\tFin de fichier :\n");
+  //printf("\tFin de fichier :\n");
   //printf("W vaut : "); print_sequence(w); printf("\n");
   if(w->succ == NULL){
     writeBin(fw, w->elem, nBitsCode, 0);
     //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-    printf("On ecrit : \t\t\t%d\n", w->elem);
+    //printf("On ecrit : \t\t\t%d\n", w->elem);
   }
   else{
     writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
     //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-    printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
+    //printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
   }
 
   // write the new end of file character
   writeBin(fw, eof, nBitsCode, 1);
-  printf("Nombre d'éléments dans le dico : %d\n", numberElemDic(Dictionary));
+  //printf("Nombre d'éléments dans le dico : %d\n", numberElemDic(Dictionary));
   freeDictionary(Dictionary);
 }
 
@@ -105,15 +115,15 @@ void decompress(FILE *fr, FILE *fw){
 
   c = readBin(fr, nBitsCode);
   writeBin(fw, c, 8, 0);
+  printf("%d\n", c);
 
-  printf("Caractere lu : \t%d\n", c);
-  printf("Caractere ecrit : \t\t%c\n", c);
+  //printf("Caractere lu : \t%d\n", c);
+  //printf("Caractere ecrit : \t\t%c\n", c);
 
   w = add_to_tail(NULL, c);
   while(!feof(fr) && c != eof){
-    printf("\n\n\n");
+    //printf("\n\n\n");
     c = readBin(fr, nBitsCode);
-    printf("Caractere lu : \t%d\n", c);
 
     if(c == increment)
       nBitsCode++;
@@ -124,6 +134,7 @@ void decompress(FILE *fr, FILE *fw){
       initVar();
     }
     else if(c != eof){
+      //printf("Caractere lu : \t%d\n", c);
       if(c <= 255)
         toWrite = add_to_tail(NULL, c);
       else{
@@ -135,20 +146,27 @@ void decompress(FILE *fr, FILE *fw){
         }
       }
       
+      /*if(toWrite->elem == 5){
+        printf("Bug : \t"); print_sequence(toWrite); printf("\n");
+        getchar();
+      }*/
+
       // write the sequence toWrite
       seqTmp = toWrite;
       while(seqTmp != NULL){
-        printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
+        //printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
         writeBin(fw, seqTmp->elem, 8, 0);
+        printf("%d\n", seqTmp->elem);
         seqTmp = seqTmp->succ;
       }
 
       // add w + toWrite[0] to the Dictionary
       pSequence toAdd = add_to_tail(w, toWrite->elem);
-      printf("Sequence à ajouter : "); print_sequence_char(toAdd); printf(" avec comme num : %d\n", nextCode);
+      //printf("Sequence à ajouter : "); print_sequence_char(toAdd); printf(" avec comme num : %d\n", nextCode);
       add_to_dictionary(toAdd, Dictionary);
 
-      w = toWrite;
+      w = NULL;
+      copySequence(toWrite, &w);
     }
   }
 }
@@ -162,7 +180,7 @@ void incrementNbits(uint16_t value, FILE *fw){
   }
   if(nBitsCode < i){
     nBitsCode++;
-    writeBin(fw, increment, nBitsCode, 0);
+    writeBin(fw, increment, nBitsCode-1, 0);
   }
   //printf("I = %d\n", i);
 }

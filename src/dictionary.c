@@ -104,22 +104,25 @@ pTree findElem(pSequence seq, pTree t){
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
-			return 0;
+			return NULL;
 		}
 		else {
 			//printf("Temp ascii %d \n", temp->ascii);
 		  	if(w->elem != temp->ascii){
-			    if(w->succ == NULL){
-			    	return temp;
-			    }
-			    return est_dans_dico(w, temp->left);
+			    /*if(w->succ == NULL){
+			    	return temp; // bug ici !
+			    }*/
+			    return findElem(w, temp->left);
 	  		}
 	  		else {
 			  	w=w->succ;
 			  	if (w != NULL)
 			  	{
-			  		if (temp->right != NULL)
-			  			return est_dans_dico(w, temp->right);
+			  		if (temp->right != NULL){
+			  			//printf("temp->right :\n");
+			  			//print_tree(temp->right, 0);
+			  			return findElem(w, temp->right);
+			  		}
 			  		else
 			  			return NULL;
 			  	}
@@ -137,7 +140,7 @@ pTree findElemDico(pSequence seq, pTree dic[]){
 
 
 pTree addToDictionnary (pSequence seq, pTree dic[]){
-	
+	return NULL;
 }
 
 /* Function used to insert an entity in a tree */
@@ -168,6 +171,7 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	//printf("nextCode = %d\n", nextCode);
 	//print_sequence(seq);
+	//print_tree(dic[0], 0);
 
 	DecodeDictionary = addToDecodeMap(seq, nextCode, DecodeDictionary);
 

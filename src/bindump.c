@@ -4,12 +4,12 @@
 
 #include "binrw.h"
 
-void binaryRead(FILE* f, uint8_t nOctetPerLine){
+void binaryRead(FILE* f, uint8_t nOctetPerLine, uint8_t nBits){
 	char characters[nOctetPerLine];
 	uint8_t newNOctets = nOctetPerLine;
 	uint8_t nLine = 0;
 	uint8_t numberOfline = 0;
-	uint8_t bin; 
+	uint16_t bin; 
 	int i;
 	uint8_t cont = 1;
 	char toRead, buf;
@@ -21,9 +21,12 @@ void binaryRead(FILE* f, uint8_t nOctetPerLine){
 			printf("0");
 		printf("%x  ", nLine);
 		for(i=0; i<newNOctets && !feof(f); i++){
-			bin = readBin(f, 8);
+			bin = readBin(f, nBits);
 			characters[i] = bin;
-			displayBinary(bin, 1);
+			if(nBits == 8)
+				displayBinary(bin, 1);
+			else
+				displayBinary(bin, 2);
 			printf(" ");
 		}
 		if(feof(f)){
@@ -61,19 +64,28 @@ void binaryRead(FILE* f, uint8_t nOctetPerLine){
 int main (int argc, char **argv){
 	FILE *file;
 	
-	if(argc != 2){
-		fprintf(stderr, "Error : ./bindump [filename]\n");
+	if(argc != 3){
+		fprintf(stderr, "Error : ./bindump [filename] [number of bits for encoding]\n");
 		return 1;
 	}
 
 	file = fopen(argv[1], "rb");
+	int nBits;
+	sscanf(argv[2], "%d", &nBits);
+	if(nBits < 8 || nBits > 16){
+		fprintf(stderr, "Error : Number of bits for encoding has to be a number between 8 and 16.\n");
+		return 1;
+	}
 
 	if(!file){
         fprintf(stderr, "Error : file is inaccessible.\n");
         return 1;
     }
     else{
-    	binaryRead(file, 8);
+    	if(nBits > 8)
+    		binaryRead(file, 4, nBits);
+    	else
+    		binaryRead(file, 8, nBits);
     	fclose(file);
     }
 	return 0;
