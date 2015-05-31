@@ -12,7 +12,9 @@ uint16_t increment;
 uint16_t eof;
 uint16_t clean_dic;
 
-void InitVar();
+uint16_t nextCode;
+
+void initVar();
 
 pTree Dictionary[259];
 
@@ -24,10 +26,19 @@ typedef struct decode_map_t{
 } DecodeMap;
 
 typedef DecodeMap *pDecodeMap;
+
+pDecodeMap DecodeDictionary;
+
 int numberElemDic(pTree dic[]);
 pTree add_to_dictionary(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
-pTree est_dans_dico(pSequence seq, pTree t);
+pTree findElem(pSequence seq, pTree t);
+pTree findElemDico(pSequence seq, pTree dic[]);
+
+pDecodeMap addToDecodeMap(pSequence seq, uint16_t code, pDecodeMap map);
+pSequence findCode(uint16_t code, pDecodeMap map);
+
+void freeDictionary(pTree dictionary[259]);
 
 #endif

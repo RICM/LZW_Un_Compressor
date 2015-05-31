@@ -15,7 +15,7 @@ int main (int argc, char **argv){
         return 1;
     }
     else{
-    	compress(file, file2);
+    	decompress(file, file2);
     	fclose(file);
     	fclose(file2);
     }

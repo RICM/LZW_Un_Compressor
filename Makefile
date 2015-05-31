@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw test_sequence test_dic test_binrw test_compress
+EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress test_sequence bindump
 DEBUG = 0
 DEBUG_BINRW_LEVEL = 0
 
@@ -26,9 +26,19 @@ lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
 	$(CC) -o $(DIR_TGT)$@ $<
 	@echo -e
 
+bindump: $(DIR_TGT)bindump.o $(DIR_TGT)binrw.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o
+	@echo -e
+
 test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	@echo -e
+
+test_tree: $(DIR_TGT)test_tree.o $(DIR_TGT)tree.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)tree.o
 	@echo -e
 
 test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
@@ -46,11 +56,26 @@ test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compression.o $(DIR_TGT)dicti
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo -e
 
+test_decompress: $(DIR_TGT)test_decompress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	@echo -e
+
 #-------------------------------------------------
 #                   DEPENDENCIES
 #-------------------------------------------------
 
 $(DIR_TGT)test_sequence.o: $(DIR_SRC)test_sequence.c $(DIR_INCLUDE)sequence.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)bindump.o: $(DIR_SRC)bindump.c $(DIR_INCLUDE)binrw.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)test_tree.o: $(DIR_SRC)test_tree.c $(DIR_INCLUDE)tree.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
@@ -66,6 +91,11 @@ $(DIR_TGT)test_binrw.o: $(DIR_SRC)test_binrw.c $(DIR_INCLUDE)binrw.h
 	@echo -e
 
 $(DIR_TGT)test_compress.o: $(DIR_SRC)test_compress.c $(DIR_INCLUDE)compression.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
+$(DIR_TGT)test_decompress.o: $(DIR_SRC)test_decompress.c $(DIR_INCLUDE)compression.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
