@@ -27,6 +27,15 @@ void print_tree(pTree tree){
 	}
 }
 
+pTree copyTree(pTree tree){
+	pTree newTree;
+	if(tree != NULL)
+		newTree = createTree(tree->ascii, tree->code, copyTree(tree->left), copyTree(tree->right));
+	else
+		return NULL;
+	return newTree;
+}
+
 void freeTree(pTree *tree){
 	if(*tree != NULL){
 		freeTree(&((*tree)->left));
