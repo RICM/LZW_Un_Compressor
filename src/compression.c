@@ -18,9 +18,10 @@ void compress(FILE *fr, FILE *fw){
     c = readBin(fr, 8);
 
     //printf("Caractere lu : \t%c\n", c);
-    printf("%d\n", c);
 
-    //if(c != 255){
+    if(!feof(fr)){
+
+      printf("%d\n", c);
 
       // tmp = w.c
       tmp = NULL;
@@ -85,7 +86,7 @@ void compress(FILE *fr, FILE *fw){
         initVar();
         nBitsCode = 9;
       }
-    //}
+    }
   }
   //printf("\tFin de fichier :\n");
   //printf("W vaut : "); print_sequence(w); printf("\n");
@@ -109,6 +110,7 @@ void compress(FILE *fr, FILE *fw){
 void decompress(FILE *fr, FILE *fw){
   nBitsCode = 9;
   initVar();
+  pSequence toAdd;
 
   uint16_t c;
   pSequence toWrite, w, seqTmp;
@@ -116,6 +118,8 @@ void decompress(FILE *fr, FILE *fw){
   c = readBin(fr, nBitsCode);
   writeBin(fw, c, 8, 0);
   printf("%d\n", c);
+
+  int i = 0;
 
   //printf("Caractere lu : \t%d\n", c);
   //printf("Caractere ecrit : \t\t%c\n", c);
@@ -153,15 +157,23 @@ void decompress(FILE *fr, FILE *fw){
 
       // write the sequence toWrite
       seqTmp = toWrite;
+      //printf("Bug : \t"); print_sequence(toWrite); printf("\n");
       while(seqTmp != NULL){
         //printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
         writeBin(fw, seqTmp->elem, 8, 0);
         printf("%d\n", seqTmp->elem);
+        if(seqTmp->elem == 31){
+          i++;
+          if(i == 17)
+            getchar();
+        }
         seqTmp = seqTmp->succ;
       }
 
       // add w + toWrite[0] to the Dictionary
-      pSequence toAdd = add_to_tail(w, toWrite->elem);
+      toAdd = NULL;
+      copySequence(w, &toAdd);
+      toAdd = add_to_tail(toAdd, toWrite->elem);
       //printf("Sequence à ajouter : "); print_sequence_char(toAdd); printf(" avec comme num : %d\n", nextCode);
       add_to_dictionary(toAdd, Dictionary);
 
