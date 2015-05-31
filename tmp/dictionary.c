@@ -94,8 +94,8 @@ pTree isPresentEncode(pSequence seq, pTree dic[]){
 	return ispresent;
 }
 
-/* Recursive research of a sequence inside the tree */
-pTree findElem(pSequence seq, pTree t){
+/* Manipulation du dictionnaire */
+pTree est_dans_dico(pSequence seq, pTree t){
 	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
 		return NULL;
@@ -104,25 +104,23 @@ pTree findElem(pSequence seq, pTree t){
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
-			return NULL;
+			return 0;
 		}
 		else {
 			//printf("Temp ascii %d \n", temp->ascii);
 		  	if(w->elem != temp->ascii){
-			    /*if(w->succ == NULL){
-			    	return temp; // bug ici !
-			    }*/
-			    return findElem(w, temp->left);
+			    if(w->succ == NULL){
+			    	return temp; // le bug est là !
+			    	// return temp; d'après antoine
+			    }
+			    return est_dans_dico(w, temp->left);
 	  		}
 	  		else {
 			  	w=w->succ;
 			  	if (w != NULL)
 			  	{
-			  		if (temp->right != NULL){
-			  			//printf("temp->right :\n");
-			  			//print_tree(temp->right, 0);
-			  			return findElem(w, temp->right);
-			  		}
+			  		if (temp->right != NULL)
+			  			return est_dans_dico(w, temp->right);
 			  		else
 			  			return NULL;
 			  	}
@@ -133,32 +131,11 @@ pTree findElem(pSequence seq, pTree t){
   	}
 }
 
-/* Encapsulation of findElem. Simpler paramaters */
-pTree findElemDico(pSequence seq, pTree dic[]){
-	return findElem(seq->succ, dic[seq->elem]->left);
-}
-
-
-pTree addToDictionnary (pSequence seq, pTree dic[]){
-	pSequence elemToAdd = seq;
-	pSequence seqPrefixe = NULL;
-	int size = sizeSequence(seq);
-	for (int i = 0; i < size; ++i)
-	{
-		elemToAdd = elemToAdd->succ;
-	}
-	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
-	while (seqPrefixe != elemToAdd){
-		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd);
-	}
-
-	return NULL;
-}
-
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 	pTree treeToReturn = treeToInsert;
 	pTree saveParent = NULL;
+
 	while(treeToReturn != NULL && treeToReturn->ascii < toInsert){
 		saveParent = treeToReturn;
 		treeToReturn = treeToReturn->left;
@@ -183,45 +160,76 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
 	//printf("nextCode = %d\n", nextCode);
 	//print_sequence(seq);
-	//print_tree(dic[0], 0);
 
+	uint8_t way = 0;
 	DecodeDictionary = addToDecodeMap(seq, nextCode, DecodeDictionary);
 
 	if (seq->succ == NULL){
 		//printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
 	}
+
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
+
+	// if the seq is already inside
 	if (toTest != NULL){
 		return toTest;
 	}
+
 	toTest=dic[seq->elem];
+	seq = seq->succ;
+
 	if (toTest == NULL){
-		pTree newTree = createTree(seq->succ->elem,nextCode,NULL,NULL);
-		dic[seq->elem] = newTree;
+		pTree newTree = malloc(sizeof(tree));
+		newTree->ascii = seq->elem;
+		newTree->code = nextCode;
 		nextCode++;
+		newTree->left = NULL;
+		newTree->right = NULL;
+		dic[seq->elem] = newTree;
+
 		return newTree;
 	}
 
-	seq = seq->succ;
 	int ok = 1;
-	while (ok == 1){
-		save = toTest;
+	while (ok){
+
+		//if(toTest != NULL)
+			save = toTest;
+
+		//printf("Save : %d\n", save);
 		uint8_t seqAscii = seq->elem;
+
+		// we start by looking on the left
 		while(toTest != NULL && toTest->ascii < seqAscii){
 			toTest = toTest->left;
 		}
-		//printf("seq->succ %d\n", seq->succ );
+		//printf("seqAscii %d\n", seqAscii);
+		//printf("seq->succ %d\n", seq->succ == NULL);
+		//printf("toTest %d\n", toTest == NULL);
+		//printf("toTest->ascii %d\n", toTest->ascii);
+
+
 		if (seq->succ != NULL && toTest->ascii == seqAscii){
+
+			// we look at the next elem in the sequence
 			seq = seq->succ;
 			if (toTest->right == NULL){
-				pTree newTree = createTree(seq->elem,nextCode,NULL,NULL);
+				pTree newTree = malloc(sizeof(tree));
+				newTree->ascii = seq->elem;
+				newTree->code = nextCode;
 				nextCode++;
+				newTree->left = NULL;
+				newTree->right = NULL;
 				toTest->right = newTree;
 				return newTree;
 			}else{
-				toTest = toTest->right;
+				//if(!way)
+					toTest = toTest->right;
+				/*else
+					toTest = toTest->left;	
+				way = !way;*/
 			}
 		}else{
 			toTest = insertInTree(save, seqAscii);
