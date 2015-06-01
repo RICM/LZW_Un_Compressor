@@ -8,7 +8,7 @@ int interval;
   another file indicated by fw 
 */
 void compress(FILE *fr, FILE *fw){
-  pSequence w = NULL, tmp, toSearch;
+  pSequence w = NULL, tmp = NULL, toSearch = NULL;
   pTree treeFound = NULL, treePred = NULL;
 
   int isInside;
@@ -58,9 +58,7 @@ void compress(FILE *fr, FILE *fw){
         // w = tmp = w.c by copy
         w = NULL;
         copySequence(tmp, &w);
-
-        // free tmp
-        freeSequenceList(&tmp);
+        w = tmp;
 
         found = 1;
         treePred = treeFound;
@@ -111,7 +109,6 @@ void compress(FILE *fr, FILE *fw){
       initVar();
 
       freeSequenceList(&w);
-      freeSequenceList(&tmp);
 
       pred = -1;
       treeFound = NULL;
