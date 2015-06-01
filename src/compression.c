@@ -1,15 +1,15 @@
 #include "compression.h"
 
 int nBitsCode;
+int interval;
 
 /** 
   Compress a file indicated by fr into 
   another file indicated by fw 
 */
 void compress(FILE *fr, FILE *fw){
-  pSequence w = NULL;
-  pSequence tmp;
-  pTree treePred = NULL;
+  pSequence w = NULL, tmp;
+  pTree treeFound = NULL, treePred = NULL;
 
   int isInside;
 
@@ -24,6 +24,7 @@ void compress(FILE *fr, FILE *fw){
 
   // Initialisation of the variables
   nBitsCode = 9;
+  interval = 1<<nBitsCode;
   initVar();
 
   // While end of file is not reached, compress
@@ -43,9 +44,9 @@ void compress(FILE *fr, FILE *fw){
       tmp = add_to_tail(tmp, c);
 
       if(found) // if w as not already been found
-        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treePred, &treePred);
+        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treeFound, &treeFound);
       else
-        isInside = isPresentInDico(tmp, Dictionary, &treePred);
+        isInside = isPresentInDico(tmp, Dictionary, &treeFound);
 
       if(isInside != -1 || w == NULL){ // w.c is in the dictionary
         // free w
@@ -57,6 +58,7 @@ void compress(FILE *fr, FILE *fw){
         w = tmp;
 
         found = 1;
+        treePred = treeFound;
       }
       else{
         // w.c is not found, add it to the dictionary
@@ -70,15 +72,15 @@ void compress(FILE *fr, FILE *fw){
             printf("%d\n", w->elem);
         }
         else{
-
-          writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
+          writeBin(fw, treePred->code, nBitsCode, 0);
           if(DEBUG_COMPRESSION_LEVEL == 2)
-            printf("%d\n", isPresentEncode(w, Dictionary)->code);
+            printf("%d\n", treePred->code);      
         }
 
         // w = c
         w = add_to_tail(NULL, c);
-        // reinit treePred
+        // reinit treeFound
+        treeFound = NULL;
         treePred = NULL;
         found = 0;
       }
@@ -102,116 +104,98 @@ void compress(FILE *fr, FILE *fw){
       initVar();
       freeSequenceList(&w);
       pred = -1;
+      treeFound = NULL;
       treePred = NULL;
       tmp = NULL;
       found = 0;
       nBitsCode = 9;
+      interval = 1<<nBitsCode;
     }
   }
+
   // second to last character to write
   if(w->succ == NULL){
     writeBin(fw, w->elem, nBitsCode, 0);
-    //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-    //printf("On ecrit : \t\t\t%d\n", w->elem);
+    if(DEBUG_COMPRESSION_LEVEL == 2)
+      printf("%d\n", w->elem);
   }
   else{
-    writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
-    //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-    //printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
+    writeBin(fw, treePred->code, nBitsCode, 0);
+    if(DEBUG_COMPRESSION_LEVEL == 2)
+      printf("%d\n", treePred->code);      
   }
 
   // write the new end of file character
   writeBin(fw, eof, nBitsCode, 1);
+  if(DEBUG_COMPRESSION_LEVEL == 2)
+    printf("%d\n", eof);
   freeDictionary(Dictionary);
 }
 
+
+/** 
+  Decompress a file indicated by fr into 
+  another file indicated by fw 
+*/
 void decompress(FILE *fr, FILE *fw){
-  nBitsCode = 9;
-  initVar();
-  pSequence toAdd;
+
+  pSequence toAdd, toWrite, w, seqTmp;  
 
   uint16_t c;
-  pSequence toWrite, w, seqTmp;
 
+  // Initialisation of the variables
+  nBitsCode = 9;
+  initVar();
+
+  // read the first character of the file
   c = readBin(fr, nBitsCode);
   writeBin(fw, c, 8, 0);
-  //printf("%d\n", c);
+  if(DEBUG_COMPRESSION_LEVEL == 1 || DEBUG_COMPRESSION_LEVEL == 2)
+    printf("%d\n", c);
 
-  int i = 0;
-
-  //printf("Caractere lu : \t%d\n", c);
-  //printf("Caractere ecrit : \t\t%c\n", c);
-
+  // w = c
   w = add_to_tail(NULL, c);
   while(!feof(fr) && c != eof){
-    //printf("\n\n\n");
     c = readBin(fr, nBitsCode);
 
     if(c == increment)
       nBitsCode++;
     else if(c == clean_dic){
       // dictionary reset
-
-      //printBufferReadPred();
-      //printBufferRead();
-
-      /*c = readLast(nBitsCode);
-      printf("Caractere lu final : \t%d\n", c);
-      writeBin(fw, c, 8, 0);*/
-
       freeDictionary(Dictionary);
+      nBitsCode = 9;
       initVar();
 
-      /*if(!emptyReadBuffer()){
-        c = readBin(fr, nBitsCode);
-        //printf("%d\n", c);
-        printf("Caractere lu final : \t%d\n", c);
-        writeBin(fw, c, 8, 0);
-      }*/
-      nBitsCode = 9;
-
-      //flushBuffer();
-
       if(!feof(fr)){
+        // read a new first character
         c = readBin(fr, nBitsCode);
         writeBin(fw, c, 8, 0);
-        //printf("Caractere lu : \t%d\n", c);
+        if(DEBUG_COMPRESSION_LEVEL == 1 || DEBUG_COMPRESSION_LEVEL == 2)
+          printf("%d\n", c);
+
+        // w = c
         w = add_to_tail(NULL, c);
       }
     }
     else if(c != eof){
-      //if(c == 1)
-        //  printf("Coucou mon mignon !\t\t");
-      //printf("Caractere lu : \t%d\n", c);
       if(c <= 255)
         toWrite = add_to_tail(NULL, c);
       else{
         toWrite = findCode(c, DecodeDictionary);
+        // if toWrite is not found, toWrite = w.w[0]
         if(toWrite == NULL){
           toWrite = NULL;
           copySequence(w, &toWrite);
           toWrite = add_to_tail(toWrite, w->elem);
         }
       }
-      
-      /*if(toWrite->elem == 5){
-        printf("Bug : \t"); print_sequence(toWrite); printf("\n");
-        getchar();
-      }*/
 
       // write the sequence toWrite
       seqTmp = toWrite;
-      //printf("Bug : \t"); print_sequence(toWrite); printf("\n");
       while(seqTmp != NULL){
-        //printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
         writeBin(fw, seqTmp->elem, 8, 0);
-        //if(c == 1)
-          //printf("%d\n", seqTmp->elem);
-        /*if(seqTmp->elem == 31){
-          i++;
-          if(i == 17)
-            getchar();
-        }*/
+        if(DEBUG_COMPRESSION_LEVEL == 1)
+          printf("%d\n", seqTmp->elem);
         seqTmp = seqTmp->succ;
       }
 
@@ -219,24 +203,23 @@ void decompress(FILE *fr, FILE *fw){
       toAdd = NULL;
       copySequence(w, &toAdd);
       toAdd = add_to_tail(toAdd, toWrite->elem);
-      //printf("Sequence à ajouter : "); print_sequence_char(toAdd); printf(" avec comme num : %d\n", nextCode);
       add_to_dictionary(toAdd, Dictionary);
 
+      // copy w + toWrite[0] into w
       w = NULL;
       copySequence(toWrite, &w);
     }
   }
 }
 
+/**
+  Test if a value, has to be code on more bits
+  and increment nBitCode if so
+*/
 void incrementNbits(uint16_t value, FILE *fw){
-  uint16_t tmp = value;
-  uint8_t i = 0;
-  while(tmp){
-    tmp >>= 1;
-    i++;
-  }
-  if(nBitsCode < i){
+  if(value == interval){
     nBitsCode++;
     writeBin(fw, increment, nBitsCode-1, 0);
+    interval <<= 1;
   }
 }
