@@ -85,6 +85,10 @@ void compress(FILE *fr, FILE *fw){
         freeDictionary(Dictionary);
         initVar();
         nBitsCode = 9;
+        pred = -1;
+        treePred = NULL;
+        w = NULL;
+        test = NULL;
       }
     }
   }
@@ -136,8 +140,18 @@ void decompress(FILE *fr, FILE *fw){
       nBitsCode = 9;
       freeDictionary(Dictionary);
       initVar();
+
+      if(!feof(fr)){
+        c = readBin(fr, nBitsCode);
+        writeBin(fw, c, 8, 0);
+        printf("%d\n", c);
+        //printf("Caractere lu : \t%d\n", c);
+        w = add_to_tail(NULL, c);
+      }
     }
     else if(c != eof){
+      //if(c == 1)
+        //  printf("Coucou mon mignon !\t\t");
       //printf("Caractere lu : \t%d\n", c);
       if(c <= 255)
         toWrite = add_to_tail(NULL, c);
@@ -161,12 +175,13 @@ void decompress(FILE *fr, FILE *fw){
       while(seqTmp != NULL){
         //printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
         writeBin(fw, seqTmp->elem, 8, 0);
-        printf("%d\n", seqTmp->elem);
-        if(seqTmp->elem == 31){
+        //if(c == 1)
+          printf("%d\n", seqTmp->elem);
+        /*if(seqTmp->elem == 31){
           i++;
           if(i == 17)
             getchar();
-        }
+        }*/
         seqTmp = seqTmp->succ;
       }
 
