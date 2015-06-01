@@ -4,7 +4,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -O3 -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
-EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress test_sequence bindump
+EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress test_sequence bindump test_encap
 DEBUG = 0
 DEBUG_BINRW_LEVEL = 0
 DEBUG_COMPRESSION_LEVEL = 0
@@ -60,6 +60,11 @@ test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compression.o $(DIR_TGT)dicti
 test_decompress: $(DIR_TGT)test_decompress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	@echo -e
+
+test_encap: $(DIR_TGT)test_encap.o $(DIR_TGT)binrw.o $(DIR_TGT)encapsulate.o
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o $(DIR_TGT)encapsulate.o
 	@echo -e
 
 #-------------------------------------------------
@@ -126,11 +131,22 @@ $(DIR_TGT)binrw.o: $(DIR_SRC)binrw.c $(DIR_INCLUDE)binrw.h
 	$(CC) -o $@ -c $< $(CFLAGS) -DDEBUG_BINRW_LEVEL=$(DEBUG_BINRW_LEVEL)
 	@echo -e
 
+<<<<<<< HEAD
+$(DIR_TGT)test_encap.o: $(DIR_SRC)test_encap.c $(DIR_INCLUDE)encapsulate.h
+=======
 $(DIR_TGT)main.o: $(DIR_SRC)main.c $(DIR_INCLUDE)compression.h
+>>>>>>> 927df8b319fb8edb3be395cbe45c20ddcbd6b7cc
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
+<<<<<<< HEAD
+$(DIR_TGT)encapsulate.o: $(DIR_SRC)encapsulate.c $(DIR_INCLUDE)encapsulate.h $(DIR_INCLUDE)binrw.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+=======
+>>>>>>> 927df8b319fb8edb3be395cbe45c20ddcbd6b7cc
 #--------------
 #    Global
 #--------------
