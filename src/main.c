@@ -16,8 +16,8 @@ void usageDecompression (){
 	printf("correct usage : lzw [–d] [archiveName.lzw]\n");
 }
 
-void extansion(){
-	printf("The name of the archive must countain '.lzw' as extansion\n");
+void extension(){
+	printf("The name of the archive must countain '.lzw' as extension\n");
 	usageCompression();
 	printf("or\n");
 	usageDecompression();
@@ -54,7 +54,7 @@ int main (int argc, char **argv){
 			    }
 				compress(file, file2);
 			}else{
-				extansion();
+				extension();
 				return -1;
 			}
 			break;
@@ -72,7 +72,7 @@ int main (int argc, char **argv){
 			    }
 		    	decompress(file, file2);
 		    }else{
-		    	extansion();
+		    	extension();
 		    	return -1;
 		    }
 			break;
