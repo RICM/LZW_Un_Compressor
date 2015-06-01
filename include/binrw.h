@@ -19,4 +19,8 @@ void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal);
 
 uint16_t readLast(uint8_t nBits);
 
-void flushBuffer();
+void printBufferRead();
+
+void printBufferReadPred();
+
+void flushBufferRead();

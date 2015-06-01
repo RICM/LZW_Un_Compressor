@@ -148,13 +148,13 @@ returns 1 if sequence found
 int isPresentInTree(pSequence seq, pTree t){
 	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
-		return 0;
+		return -1;
 	}
 	else {
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
-			return 0;
+			return -1;
 		}
 		else {
 			//printf("Temp ascii %d \n", temp->ascii);
@@ -174,7 +174,7 @@ int isPresentInTree(pSequence seq, pTree t){
 			  			return isPresentInTree(w, temp->right);
 			  		}
 			  		else
-			  			return 0;
+			  			return -1;
 			  	}
 			  	else 
 			  		return 1;
@@ -189,7 +189,7 @@ int isPresentInTree(pSequence seq, pTree t){
 
 int isPresentInDico(pSequence seq, pTree dic []){
 	if (seq == NULL)
-		return 0;
+		return -1;
 	if (seq->succ == NULL)
 		return 1;
 	return isPresentInTree(seq->succ, dic[seq->elem]);
@@ -323,4 +323,11 @@ void freeDictionary(pTree dictionary[259]){
 	}
 	if(!b)
 		printf("Failed to free dictionary. Compression or decompression is compromised... Try again !\n");
+
+	pDecodeMap tmp = DecodeDictionary;
+	while(tmp != NULL){
+		freeSequenceList(&(tmp->sequence));
+		tmp = tmp->succ;
+	}
+	DecodeDictionary = NULL;
 }
