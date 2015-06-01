@@ -6,6 +6,7 @@ void compress(FILE *fr, FILE *fw){
   pSequence w = NULL;
   pTree treePred = NULL; 
   pTree test = NULL;
+  uint8_t isInside = -1;
   pSequence tmp;
   uint8_t c;
   int pred = -1;
@@ -36,65 +37,36 @@ void compress(FILE *fr, FILE *fw){
       //printf("w.c vaut : "); print_sequence(tmp); printf("\n");
 
       // if w as not already been found
-      //printf("treePred %d\n", treePred);
-      //printf("pred %d\n", pred);
       if(treePred != NULL && pred > -1){
-        //printf("\ntreePred : \n");
-        //print_tree(treePred, 0);
-
-        //printf("\nSequence : \n"); print_sequence(add_to_tail(add_to_tail(NULL, pred), c)); printf("\n");
-        treePred = findElem(add_to_tail(add_to_tail(NULL, pred), c), treePred); // SOUPCON
-        //printf("Je cherche la séquence avec isPresentEncode : \n"); print_sequence(tmp);
-        treePred = isPresentEncode(tmp, Dictionary);
-        /*if (treePred != NULL)
-          printf("j'ai trouvé\n");
-        else
-          printf("je n'ai pas trouvé\n");
-        printf("Je cherche la séquence avec findElemDico boucle 1 : \n"); print_sequence(tmp);*/
-        treePred = findElemDico(tmp, Dictionary);
-        /*if (treePred != NULL)
-          printf("j'ai trouvé\n");
-        else
-          printf("je n'ai pas trouvé\n");*/
+        isInside = isPresentInTree(tmp, treePred, &treePred);
       }
       else{
-        //printf("isPresentEncode\n");
-        //printf("Je cherche la séquence : \n"); print_sequence_char(tmp);
-        treePred = isPresentEncode(tmp, Dictionary);
-        /*if (treePred != NULL)
-          printf("j'ai trouvé\n");
-        else
-          printf("je n'ai pas trouvé\n");
-        printf("Je cherche la séquence avec findElemDico : \n"); print_sequence_char(tmp);*/
-        int test = isPresentInDico(tmp, Dictionary);
-        /*if (test != 0)
-          printf("j'ai trouvé\n");
-        else
-          printf("je n'ai pas trouvé\n");*/
+        isInside = isPresentInDico(tmp, Dictionary, &treePred);
       }
 
-      int test = isPresentInDico(tmp, Dictionary);
+      //int test = isPresentInDico(tmp, Dictionary);
       //printf("%d\n", treePred);
-      if(/*treePred != NULL*/test != -1 || w == NULL){ // w.c est present dans le dictionnaire
+      if(isInside != -1 || w == NULL){ // w.c est present dans le dictionnaire
         freeSequenceList(&w);
         w = NULL;
         copySequence(tmp, &w);
         w = tmp;
-        pred = c;
         //printf("On a trouvé la sequence : "); print_sequence(w); printf("\n\n");
       }
       else{
         //printf("W vaut : "); print_sequence(w); printf("\n");
 
         //printf("To add : "); print_sequence(tmp); printf("\n");
-        test = add_to_dictionary(tmp, Dictionary);
+        pSequence toAdd = NULL;
+        copySequence(tmp, &toAdd);
+        test = add_to_dictionary(toAdd, Dictionary);
         //printf("On a inséré dans le dico : %d\n", test->code);
 
         incrementNbits(nextCode-1, fw);
         
-        if (test !=NULL){
+        //if (test !=NULL){
           //printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
-        }
+        //}
 
         if(w->succ == NULL){
           writeBin(fw, w->elem, nBitsCode, 0);
@@ -110,7 +82,7 @@ void compress(FILE *fr, FILE *fw){
         w = add_to_tail(NULL, c);
         treePred = NULL;
         //printf("\n");
-      }//}
+      }
       pred = c;
       
     }
