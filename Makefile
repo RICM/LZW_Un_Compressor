@@ -2,7 +2,7 @@
 #                    VARIABLES
 #-------------------------------------------------
 CC = gcc
-CFLAGS = -g -Wall -pedantic -std=c99 -Iinclude/
+CFLAGS = -g -Wall -pedantic -O3 -std=c99 -Iinclude/
 LFLAGS = -L$(DIR_LIB)
 EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress test_sequence bindump
 DEBUG = 0

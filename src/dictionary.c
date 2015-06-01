@@ -325,11 +325,11 @@ pSequence findCode(uint16_t code, pDecodeMap map){
 		return tmp->sequence;
 }
 
-void freeDictionary(pTree dictionary[259]){
+void freeDictionary(){
 	uint8_t b = 1;
 	for(int i=0; i<259; i++){
-		freeTree(&dictionary[i]);
-		b &= (dictionary[i] == NULL);
+		freeTree(&Dictionary[i]);
+		b &= (Dictionary[i] == NULL);
 	}
 	if(!b)
 		printf("Failed to free dictionary. Compression or decompression is compromised... Try again !\n");

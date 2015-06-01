@@ -42,6 +42,6 @@ pTree findElemDico(pSequence seq, pTree dic[]);
 pDecodeMap addToDecodeMap(pSequence seq, uint16_t code, pDecodeMap map);
 pSequence findCode(uint16_t code, pDecodeMap map);
 
-void freeDictionary(pTree dictionary[259]);
+void freeDictionary();
 
 #endif

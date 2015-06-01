@@ -222,15 +222,10 @@ uint8_t emptyWriteBuffer(){
 }
 
 uint16_t readLast(uint8_t nBits){
-	uint8_t mask = 0;
-	for(int i=0; i<8; i++)
-		mask |= 1 << i;
-
 	uint16_t out = buf.data;
-	uint8_t remain = buf.remain;
 	buf.data = 0;
 	buf.remain = 0;
-	return out /*<< (nBits-remain)*/;
+	return out;
 }
 
 void printBufferRead(){
