@@ -9,6 +9,7 @@ void initVar() {
 	DecodeDictionary = NULL;
 }
 
+/* Used to get the number of element in the dictionary */
 int numberElemDic(pTree dic[]){
 	int count = 0;
 	for (int i = 0; i<258; i++){
