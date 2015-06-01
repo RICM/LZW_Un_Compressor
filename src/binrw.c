@@ -209,3 +209,25 @@ void displayBinary(uint16_t n, uint8_t nOctets){
 	s[10*nOctets-1] = '\0';
 	printf("%s", s);
 }
+
+uint8_t emptyReadBuffer(){
+	return buf.data == 0 && buf.remain == 0;
+}
+
+uint8_t emptyWriteBuffer(){
+	return bufW.data == 0 && bufW.remain == 0;
+}
+
+uint16_t readLast(uint8_t nBits){
+	uint8_t mask = 0;
+	for(int i=0; i<buf.remain; i++)
+		mask |= 1 << i;
+
+	buf.data = 0;
+	buf.remain = 0;
+	return (buf.data & mask) << (nBits-buf.remain);
+}
+
+void flushBuffer(){
+	initBuffer();
+}
