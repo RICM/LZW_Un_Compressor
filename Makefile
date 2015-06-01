@@ -131,22 +131,20 @@ $(DIR_TGT)binrw.o: $(DIR_SRC)binrw.c $(DIR_INCLUDE)binrw.h
 	$(CC) -o $@ -c $< $(CFLAGS) -DDEBUG_BINRW_LEVEL=$(DEBUG_BINRW_LEVEL)
 	@echo -e
 
-<<<<<<< HEAD
 $(DIR_TGT)test_encap.o: $(DIR_SRC)test_encap.c $(DIR_INCLUDE)encapsulate.h
-=======
-$(DIR_TGT)main.o: $(DIR_SRC)main.c $(DIR_INCLUDE)compression.h
->>>>>>> 927df8b319fb8edb3be395cbe45c20ddcbd6b7cc
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
-<<<<<<< HEAD
+$(DIR_TGT)main.o: $(DIR_SRC)main.c $(DIR_INCLUDE)compression.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo -e
+
 $(DIR_TGT)encapsulate.o: $(DIR_SRC)encapsulate.c $(DIR_INCLUDE)encapsulate.h $(DIR_INCLUDE)binrw.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
-=======
->>>>>>> 927df8b319fb8edb3be395cbe45c20ddcbd6b7cc
 #--------------
 #    Global
 #--------------
