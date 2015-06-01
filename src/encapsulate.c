@@ -93,7 +93,7 @@ void fullDesencapsulate(FILE **fr, FILE ** fw, char* fileName){
 	int j = 0;
 	do {
 		octo = readBin(*fr, 8);
-		printf("octo: %c\n", octo);
+		//printf("octo: %c\n", octo);
 		tmp[j] = octo;
 		j++;
 	} 
@@ -102,7 +102,7 @@ void fullDesencapsulate(FILE **fr, FILE ** fw, char* fileName){
 	tmp[j-1] = '\0';
 	for (int i = 0; i < strlen(tmp); ++i)
 	{
-		printf("%c\n", tmp[i]);
+		//printf("%c\n", tmp[i]);
 	}
 
 	*fw = fopen(tmp,"wb");
