@@ -7,6 +7,7 @@ LFLAGS = -L$(DIR_LIB)
 EXEC = lzw test_sequence test_dic test_binrw test_compress test_decompress test_sequence bindump
 DEBUG = 0
 DEBUG_BINRW_LEVEL = 0
+DEBUG_COMPRESSION_LEVEL = 0
 
 DIR_INCLUDE = include/
 DIR_SRC = src/
@@ -21,9 +22,9 @@ LIBS = -ltokenize
 #-------------------------------------------------
 all: $(EXEC)
 
-lzw: $(DIR_TGT)main.o $(DIR_TGT)dictionary.o
+lzw: $(DIR_TGT)main.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $<
+	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo -e
 
 bindump: $(DIR_TGT)bindump.o $(DIR_TGT)binrw.o
@@ -102,7 +103,7 @@ $(DIR_TGT)test_decompress.o: $(DIR_SRC)test_decompress.c $(DIR_INCLUDE)compressi
 
 $(DIR_TGT)compression.o: $(DIR_SRC)compression.c $(DIR_INCLUDE)compression.h $(DIR_INCLUDE)binrw.h $(DIR_INCLUDE)dictionary.h 
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CC) -o $@ -c $< $(CFLAGS) -DDEBUG_COMPRESSION_LEVEL=$(DEBUG_COMPRESSION_LEVEL)
 	@echo -e
 
 $(DIR_TGT)sequence.o: $(DIR_SRC)sequence.c $(DIR_INCLUDE)sequence.h
@@ -123,6 +124,11 @@ $(DIR_TGT)tree.o: $(DIR_SRC)tree.c $(DIR_INCLUDE)tree.h
 $(DIR_TGT)binrw.o: $(DIR_SRC)binrw.c $(DIR_INCLUDE)binrw.h
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $@ -c $< $(CFLAGS) -DDEBUG_BINRW_LEVEL=$(DEBUG_BINRW_LEVEL)
+	@echo -e
+
+$(DIR_TGT)main.o: $(DIR_SRC)main.c $(DIR_INCLUDE)compression.h
+	@echo ------------- Generating $@ -------------
+	$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -e
 
 #--------------
