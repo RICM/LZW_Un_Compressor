@@ -216,7 +216,7 @@ pTree addToDictionnary (pSequence seq, pTree dic[]){
 	}
 	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
 	while (seqPrefixe != elemToAdd){
-		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd	);
+		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd->elem);
 	}
 
 	return NULL;
