@@ -1,127 +1,114 @@
 #include "compression.h"
 
-int nBitsCode = 9;
+int nBitsCode;
 
+/** 
+  Compress a file indicated by fr into 
+  another file indicated by fw 
+*/
 void compress(FILE *fr, FILE *fw){
   pSequence w = NULL;
-  pTree treePred = NULL; 
-  pTree test = NULL;
-  int isInside = -1;
   pSequence tmp;
+  pTree treePred = NULL;
+
+  int isInside;
+
+  // Current character
   uint8_t c;
+
+  // Previous character
   int pred = -1;
+
+  // Boolean to indicate if previous sequence has been found or not
   int found = 0;
 
+  // Initialisation of the variables
+  nBitsCode = 9;
   initVar();
 
+  // While end of file is not reached, compress
   while(!binEOF() && !feof(fr)){
 
     // read a new character
     c = readBin(fr, 8);
 
-    //printf("Caractere lu : \t%c\n", c);
-
     if(!feof(fr)){
 
-      //printf("%d\n", c);
+      if(DEBUG_COMPRESSION_LEVEL == 1)
+        printf("%d\n", c);
 
       // tmp = w.c
       tmp = NULL;
       copySequence(w, &tmp);
       tmp = add_to_tail(tmp, c);
-      //printf("w.c vaut : "); print_sequence(tmp); printf("\n");
-      // if w as not already been found
-      if(found){
-        //printf("First\n");
-        //print_tree(treePred, 0);
-        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treePred, &treePred);
-      }
-      else{
-        //printf("Second\n");
-        isInside = isPresentInDico(tmp, Dictionary, &treePred);
-        //print_tree(treePred, 0);
-        //printf("%d\n", isInside);
-      }
 
-      //int test = isPresentInDico(tmp, Dictionary);
-      //printf("%d\n", treePred);
-      if(isInside != -1 || w == NULL){ // w.c est present dans le dictionnaire
-        //printf("On a trouvé la sequence : "); print_sequence(tmp); printf("\n\n");
+      if(found) // if w as not already been found
+        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treePred, &treePred);
+      else
+        isInside = isPresentInDico(tmp, Dictionary, &treePred);
+
+      if(isInside != -1 || w == NULL){ // w.c is in the dictionary
+        // free w
         freeSequenceList(&w);
+
+        // w = tmp = w.c by copy
         w = NULL;
         copySequence(tmp, &w);
         w = tmp;
+
         found = 1;
       }
       else{
-        //printf("W vaut : "); print_sequence(w); printf("\n");
-
-        //pSequence toAdd = NULL;
-        //copySequence(tmp, &toAdd);
-        //printf("To add : "); print_sequence(tmp); printf("\n");
-        test = add_to_dictionary(tmp, Dictionary);
+        // w.c is not found, add it to the dictionary
+        add_to_dictionary(tmp, Dictionary);
 
         incrementNbits(nextCode-1, fw);
         
-        /*if (test !=NULL){
-          printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
-        }*/
-
-        if(w->succ == NULL){
+        if(w->succ == NULL){ // if w is just a character, write the character
           writeBin(fw, w->elem, nBitsCode, 0);
-          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          //printf("On ecrit : \t\t\t%d\n", w->elem);
+          if(DEBUG_COMPRESSION_LEVEL == 2)
+            printf("%d\n", w->elem);
         }
         else{
+
           writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
-          //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          //printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
+          if(DEBUG_COMPRESSION_LEVEL == 2)
+            printf("%d\n", isPresentEncode(w, Dictionary)->code);
         }
 
+        // w = c
         w = add_to_tail(NULL, c);
+        // reinit treePred
         treePred = NULL;
         found = 0;
-        //printf("\n");
       }
       pred = c;
-      
     }
 
     if(nextCode == 16384){
+
       // dictionary reset
       c = readLast(nBitsCode);
-      //printf("Cacacac %d\n", c);
       writeBin(fw, c, nBitsCode, 0);
-      //printBufferReadPred();
-      //printBufferRead();
-      //printf("On ecrit final : \t\t\t%d\n", c);
 
-      /* if(!emptyReadBuffer()){
-        c = readLast(nBitsCode);
-        writeBin(fw, c, nBitsCode, 0);
-        printf("On ecrit final : \t\t\t%d\n", c);
-        //w = add_to_tail(NULL, c);
-      }*/
-
+      // clear the read buffer
       flushBufferRead();
 
+      // write the character for cleaning the dictionary
       writeBin(fw, clean_dic, nBitsCode, 0);
+
+      // reinit dictionary and variables
       freeDictionary(Dictionary);
       initVar();
+      freeSequenceList(&w);
       pred = -1;
       treePred = NULL;
-
-      freeSequenceList(&w);
       tmp = NULL;
-      test = NULL;
-     
-      //flushBuffer();
-
+      found = 0;
       nBitsCode = 9;
     }
   }
-  //printf("\tFin de fichier :\n");
-  //printf("W vaut : "); print_sequence(w); printf("\n");
+  // second to last character to write
   if(w->succ == NULL){
     writeBin(fw, w->elem, nBitsCode, 0);
     //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
@@ -135,7 +122,6 @@ void compress(FILE *fr, FILE *fw){
 
   // write the new end of file character
   writeBin(fw, eof, nBitsCode, 1);
-  //printf("Nombre d'éléments dans le dico : %d\n", numberElemDic(Dictionary));
   freeDictionary(Dictionary);
 }
 
@@ -253,5 +239,4 @@ void incrementNbits(uint16_t value, FILE *fw){
     nBitsCode++;
     writeBin(fw, increment, nBitsCode-1, 0);
   }
-  //printf("I = %d\n", i);
 }
