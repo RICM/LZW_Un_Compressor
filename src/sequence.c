@@ -45,8 +45,9 @@ void freeSequenceList(pSequence *seq){
 	pSequence tmp;
 	while(*seq != NULL){
 		tmp = *seq;
-		*seq = (*seq)->succ;
 		free(tmp);
+		*seq = (*seq)->succ;
+		tmp = NULL;
 	}
 }
 

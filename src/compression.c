@@ -8,7 +8,7 @@ int interval;
   another file indicated by fw 
 */
 void compress(FILE *fr, FILE *fw){
-  pSequence w = NULL, tmp;
+  pSequence w = NULL, tmp, toSearch;
   pTree treeFound = NULL, treePred = NULL;
 
   int isInside;
@@ -43,8 +43,11 @@ void compress(FILE *fr, FILE *fw){
       copySequence(w, &tmp);
       tmp = add_to_tail(tmp, c);
 
-      if(found) // if w as not already been found
-        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treeFound, &treeFound);
+      if(found){ // if w as not already been found
+        toSearch = add_to_tail(add_to_tail(NULL, pred), c);
+        isInside = isPresentInTree(toSearch, treeFound, &treeFound);
+        freeSequenceList(&toSearch);
+      }
       else
         isInside = isPresentInDico(tmp, Dictionary, &treeFound);
 
@@ -55,7 +58,9 @@ void compress(FILE *fr, FILE *fw){
         // w = tmp = w.c by copy
         w = NULL;
         copySequence(tmp, &w);
-        w = tmp;
+
+        // free tmp
+        freeSequenceList(&tmp);
 
         found = 1;
         treePred = treeFound;
@@ -78,7 +83,9 @@ void compress(FILE *fr, FILE *fw){
         }
 
         // w = c
+        freeSequenceList(&w);
         w = add_to_tail(NULL, c);
+
         // reinit treeFound
         treeFound = NULL;
         treePred = NULL;
@@ -100,14 +107,17 @@ void compress(FILE *fr, FILE *fw){
       writeBin(fw, clean_dic, nBitsCode, 0);
 
       // reinit dictionary and variables
-      freeDictionary(Dictionary);
+      freeDictionary();
       initVar();
+
       freeSequenceList(&w);
+      freeSequenceList(&tmp);
+
       pred = -1;
       treeFound = NULL;
       treePred = NULL;
-      tmp = NULL;
       found = 0;
+
       nBitsCode = 9;
       interval = 1<<nBitsCode;
     }
@@ -129,7 +139,10 @@ void compress(FILE *fr, FILE *fw){
   writeBin(fw, eof, nBitsCode, 1);
   if(DEBUG_COMPRESSION_LEVEL == 2)
     printf("%d\n", eof);
-  freeDictionary(Dictionary);
+
+  freeSequenceList(&w);
+  freeSequenceList(&tmp);
+  freeDictionary();
 }
 
 
@@ -139,7 +152,7 @@ void compress(FILE *fr, FILE *fw){
 */
 void decompress(FILE *fr, FILE *fw){
 
-  pSequence toAdd, toWrite, w, seqTmp;  
+  pSequence toAdd = NULL, toWrite = NULL, w = NULL, seqTmp = NULL;  
 
   uint16_t c;
 
@@ -162,7 +175,7 @@ void decompress(FILE *fr, FILE *fw){
       nBitsCode++;
     else if(c == clean_dic){
       // dictionary reset
-      freeDictionary(Dictionary);
+      freeDictionary();
       nBitsCode = 9;
       initVar();
 
@@ -174,6 +187,7 @@ void decompress(FILE *fr, FILE *fw){
           printf("%d\n", c);
 
         // w = c
+        freeSequenceList(&w);
         w = add_to_tail(NULL, c);
       }
     }
@@ -184,7 +198,6 @@ void decompress(FILE *fr, FILE *fw){
         toWrite = findCode(c, DecodeDictionary);
         // if toWrite is not found, toWrite = w.w[0]
         if(toWrite == NULL){
-          toWrite = NULL;
           copySequence(w, &toWrite);
           toWrite = add_to_tail(toWrite, w->elem);
         }
@@ -200,16 +213,23 @@ void decompress(FILE *fr, FILE *fw){
       }
 
       // add w + toWrite[0] to the Dictionary
+      //freeSequenceList(&toAdd);
       toAdd = NULL;
       copySequence(w, &toAdd);
       toAdd = add_to_tail(toAdd, toWrite->elem);
       add_to_dictionary(toAdd, Dictionary);
 
       // copy w + toWrite[0] into w
-      w = NULL;
+      //w = NULL;
+      freeSequenceList(&w);
       copySequence(toWrite, &w);
     }
   }
+
+  freeSequenceList(&w);
+  freeSequenceList(&toAdd);
+  freeSequenceList(&toWrite);
+  freeDictionary();
 }
 
 /**
