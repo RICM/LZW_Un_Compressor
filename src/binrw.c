@@ -1,7 +1,7 @@
 
 #include "binrw.h"
 
-Buffer buf;
+Buffer buf, bufPred;
 Buffer bufW;
 uint8_t end_of_file = 0;
 
@@ -30,6 +30,9 @@ uint16_t readBin(FILE *f, uint8_t nBits){
 		printf("Local buffer: \t\t\t"); displayBinary(buf.data, 2); printf("\n");
 		printf("Current buffer: \t\t"); displayBinary(buf_tmp.data, 2); printf("\n");
 	}
+
+	bufPred.data = buf.data;
+	bufPred.remain = buf.remain;
 
 	// for encoding
 	if(nBits == 8){
@@ -208,4 +211,34 @@ void displayBinary(uint16_t n, uint8_t nOctets){
 	}
 	s[10*nOctets-1] = '\0';
 	printf("%s", s);
+}
+
+uint8_t emptyReadBuffer(){
+	return buf.data == 0 && buf.remain == 0;
+}
+
+uint8_t emptyWriteBuffer(){
+	return bufW.data == 0 && bufW.remain == 0;
+}
+
+uint16_t readLast(uint8_t nBits){
+	uint16_t out = buf.data;
+	buf.data = 0;
+	buf.remain = 0;
+	return out;
+}
+
+void printBufferRead(){
+	displayBinary(buf.data, 2); 
+	printf("   Remain : %d\n", buf.remain);
+}
+
+void printBufferReadPred(){
+	displayBinary(bufPred.data, 2); 
+	printf("   Remain : %d\n", bufPred.remain);
+}
+
+void flushBufferRead(){
+	buf.data = 0;
+	buf.remain = 0;
 }

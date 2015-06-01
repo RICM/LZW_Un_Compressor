@@ -63,6 +63,7 @@ void freeTree(pTree *tree){
 	if(*tree != NULL){
 		freeTree(&((*tree)->left));
 		freeTree(&((*tree)->right));
+		free(*tree);
 		*tree = NULL;
 	}
 }

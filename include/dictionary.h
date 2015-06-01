@@ -33,12 +33,15 @@ int numberElemDic(pTree dic[]);
 pTree add_to_dictionary(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
+int isPresentInDico(pSequence, pTree dic [], pTree *toReturn);
+int isPresentInTree(pSequence seq, pTree t, pTree *toReturn);
+
 pTree findElem(pSequence seq, pTree t);
 pTree findElemDico(pSequence seq, pTree dic[]);
 
 pDecodeMap addToDecodeMap(pSequence seq, uint16_t code, pDecodeMap map);
 pSequence findCode(uint16_t code, pDecodeMap map);
 
-void freeDictionary(pTree dictionary[259]);
+void freeDictionary();
 
 #endif

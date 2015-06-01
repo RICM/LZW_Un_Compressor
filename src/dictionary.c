@@ -9,6 +9,7 @@ void initVar() {
 	DecodeDictionary = NULL;
 }
 
+/* Used to get the number of element in the dictionary */
 int numberElemDic(pTree dic[]){
 	int count = 0;
 	for (int i = 0; i<258; i++){
@@ -135,7 +136,73 @@ pTree findElem(pSequence seq, pTree t){
 
 /* Encapsulation of findElem. Simpler paramaters */
 pTree findElemDico(pSequence seq, pTree dic[]){
+	if (seq->succ == NULL)
+		return dic[seq->elem];
 	return findElem(seq->succ, dic[seq->elem]->left);
+}
+
+/* Searches a sequence in a tree
+returns 1 if sequence found
+0 else
+*/
+
+int isPresentInTree(pSequence seq, pTree t, pTree *toReturn){
+	//printf("Est dans dico ?\n");
+	if (seq == NULL) {
+		*toReturn = NULL;
+		return -1;
+	}
+	else {
+		pSequence w = seq;
+		pTree temp = t;
+		if((temp == NULL)||(temp->ascii > w->elem)){
+			*toReturn = NULL;
+			return -1;
+		}
+		else {
+			//printf("Temp ascii %d \n", temp->ascii);
+		  	if(w->elem != temp->ascii){
+			    /*if(w->succ == NULL){
+			    	return temp; // bug ici !
+			    }*/
+			    return isPresentInTree(w, temp->left, &(*toReturn));
+	  		}
+	  		else {
+			  	w=w->succ;
+			  	if (w != NULL)
+			  	{
+			  		if (temp->right != NULL){
+			  			//printf("temp->right :\n");
+			  			//print_tree(temp->right, 0);
+			  			return isPresentInTree(w, temp->right, &(*toReturn));
+			  		}else{
+			  			*toReturn = NULL;
+			  			return -1;
+			  		}
+			  	}
+			  	else {
+			  		*toReturn = temp;
+			  		return 1;
+			  	}
+			}
+		}
+  	}
+}
+
+/* Searches a sequence in dictionary 
+	returns 1 if sequence found
+	0 else */
+
+int isPresentInDico(pSequence seq, pTree dic [], pTree *toReturn){
+	if (seq == NULL){
+		*toReturn = NULL;
+		return -1;
+	}
+	if (seq->succ == NULL){
+		*toReturn = dic[seq->elem];
+		return 1;
+	}
+	return isPresentInTree(seq->succ, dic[seq->elem], &(*toReturn));
 }
 
 
@@ -149,7 +216,7 @@ pTree addToDictionnary (pSequence seq, pTree dic[]){
 	}
 	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
 	while (seqPrefixe != elemToAdd){
-		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd);
+		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd	);
 	}
 
 	return NULL;
@@ -258,12 +325,19 @@ pSequence findCode(uint16_t code, pDecodeMap map){
 		return tmp->sequence;
 }
 
-void freeDictionary(pTree dictionary[259]){
+void freeDictionary(){
 	uint8_t b = 1;
 	for(int i=0; i<259; i++){
-		freeTree(&dictionary[i]);
-		b &= (dictionary[i] == NULL);
+		freeTree(&Dictionary[i]);
+		b &= (Dictionary[i] == NULL);
 	}
 	if(!b)
 		printf("Failed to free dictionary. Compression or decompression is compromised... Try again !\n");
+
+	pDecodeMap tmp = DecodeDictionary;
+	while(tmp != NULL){
+		freeSequenceList(&(tmp->sequence));
+		tmp = tmp->succ;
+	}
+	DecodeDictionary = NULL;
 }

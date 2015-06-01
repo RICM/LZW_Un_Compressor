@@ -16,3 +16,11 @@ uint8_t binEOF();
 uint16_t readBin(FILE *f, uint8_t nBits);
 
 void writeBin(FILE *f, uint16_t toWrite, uint8_t nBits, uint8_t isFinal);
+
+uint16_t readLast(uint8_t nBits);
+
+void printBufferRead();
+
+void printBufferReadPred();
+
+void flushBufferRead();
