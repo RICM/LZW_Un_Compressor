@@ -4,6 +4,7 @@
 #include "dictionary.h"
 
 int main (int argc, char **argv){
+	/*
 	pTree elem6 = createTree(7, 7, NULL, NULL);
 	pTree elem5 = createTree(10, 10, NULL, elem6);
 	pTree elem4 = createTree(4, 4, elem5, NULL);
@@ -47,7 +48,7 @@ int main (int argc, char **argv){
 	print_sequence(sequence2);
 	printf("\nSequence 3 :\n");
 	print_sequence(sequence3);
-	printf("\n");
+	printf("\n");*/
 	/*if (sequence == NULL)
 		printf("Seq is null\n");
 	pTree test = isPresentEncode(sequence, Dictionary);
@@ -71,7 +72,7 @@ int main (int argc, char **argv){
 		printf("goodbye\n");
 	*/
 
-	printf("Adding to tree\n");
+	/*printf("Adding to tree\n");
 	pTree test2 = add_to_dictionary(sequence2, Dictionary);
 	if (test2 != NULL){
 		printf("Printing tree\n");
@@ -89,5 +90,5 @@ int main (int argc, char **argv){
 		printf("Printing tree\n");
 		print_tree(test4);
 	}
-	print_tree(Dictionary[1]);
+	print_tree(Dictionary[1]);*/
 }
