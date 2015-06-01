@@ -135,7 +135,64 @@ pTree findElem(pSequence seq, pTree t){
 
 /* Encapsulation of findElem. Simpler paramaters */
 pTree findElemDico(pSequence seq, pTree dic[]){
+	if (seq->succ == NULL)
+		return dic[seq->elem];
 	return findElem(seq->succ, dic[seq->elem]->left);
+}
+
+/* Searches a sequence in a tree
+returns 1 if sequence found
+0 else
+*/
+
+int isPresentInTree(pSequence seq, pTree t){
+	//printf("Est dans dico ?\n");
+	if (seq == NULL) {
+		return 0;
+	}
+	else {
+		pSequence w = seq;
+		pTree temp = t;
+		if((temp == NULL)||(temp->ascii > w->elem)){
+			return 0;
+		}
+		else {
+			//printf("Temp ascii %d \n", temp->ascii);
+		  	if(w->elem != temp->ascii){
+			    /*if(w->succ == NULL){
+			    	return temp; // bug ici !
+			    }*/
+			    return isPresentInTree(w, temp->left);
+	  		}
+	  		else {
+			  	w=w->succ;
+			  	if (w != NULL)
+			  	{
+			  		if (temp->right != NULL){
+			  			//printf("temp->right :\n");
+			  			//print_tree(temp->right, 0);
+			  			return isPresentInTree(w, temp->right);
+			  		}
+			  		else
+			  			return 0;
+			  	}
+			  	else 
+			  		return 1;
+			}
+		}
+  	}
+}
+
+/* Searches a sequence in dictionary 
+	returns 1 if sequence found
+	0 else */
+
+int isPresentInDico(pSequence seq, pTree dic []){
+	if (seq == NULL)
+		return 0;
+	if (seq->succ == NULL)
+		return 1;
+	return isPresentInTree(seq->succ, dic[seq->elem]);
 }
 
 
@@ -149,7 +206,7 @@ pTree addToDictionnary (pSequence seq, pTree dic[]){
 	}
 	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
 	while (seqPrefixe != elemToAdd){
-		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd);
+		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd	);
 	}
 
 	return NULL;

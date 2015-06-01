@@ -37,11 +37,34 @@ void compress(FILE *fr, FILE *fw){
         //print_tree(treePred, 0);
 
         //printf("\nSequence : \n"); print_sequence(add_to_tail(add_to_tail(NULL, pred), c)); printf("\n");
-        treePred = findElem(add_to_tail(add_to_tail(NULL, pred), c), treePred);
+        treePred = findElem(add_to_tail(add_to_tail(NULL, pred), c), treePred); // SOUPCON
+        printf("Je cherche la séquence avec isPresentEncode : \n"); print_sequence(tmp);
+        treePred = isPresentEncode(tmp, Dictionary);
+        if (treePred != NULL)
+          printf("j'ai trouvé\n");
+        else
+          printf("je n'ai pas trouvé\n");
+        printf("Je cherche la séquence avec findElemDico boucle 1 : \n"); print_sequence(tmp);
+        treePred = findElemDico(tmp, Dictionary);
+        if (treePred != NULL)
+          printf("j'ai trouvé\n");
+        else
+          printf("je n'ai pas trouvé\n");
       }
       else{
         //printf("isPresentEncode\n");
+        printf("Je cherche la séquence : \n"); print_sequence_char(tmp);
         treePred = isPresentEncode(tmp, Dictionary);
+        if (treePred != NULL)
+          printf("j'ai trouvé\n");
+        else
+          printf("je n'ai pas trouvé\n");
+        printf("Je cherche la séquence avec findElemDico : \n"); print_sequence_char(tmp);
+        int test = isPresentInDico(tmp, Dictionary);
+        if (test != 0)
+          printf("j'ai trouvé\n");
+        else
+          printf("je n'ai pas trouvé\n");
       }
 
       //printf("%d\n", treePred);
@@ -55,6 +78,7 @@ void compress(FILE *fr, FILE *fw){
 
         //printf("To add : "); print_sequence(tmp); printf("\n");
         test = add_to_dictionary(tmp, Dictionary);
+        printf("On a inséré dans le dico : %d\n", test->code);
 
         incrementNbits(nextCode-1, fw);
         
