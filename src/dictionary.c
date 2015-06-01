@@ -146,15 +146,17 @@ returns 1 if sequence found
 0 else
 */
 
-int isPresentInTree(pSequence seq, pTree t){
+int isPresentInTree(pSequence seq, pTree t, pTree toReturn){
 	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
+		toReturn = NULL;
 		return -1;
 	}
 	else {
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
+			toReturn == NULL;
 			return -1;
 		}
 		else {
@@ -173,12 +175,15 @@ int isPresentInTree(pSequence seq, pTree t){
 			  			//printf("temp->right :\n");
 			  			//print_tree(temp->right, 0);
 			  			return isPresentInTree(w, temp->right);
-			  		}
-			  		else
+			  		}else{
+			  			toReturn == NULL;
 			  			return -1;
+			  		}
 			  	}
-			  	else 
+			  	else {
+			  		toReturn = temp;
 			  		return 1;
+			  	}
 			}
 		}
   	}
@@ -188,12 +193,14 @@ int isPresentInTree(pSequence seq, pTree t){
 	returns 1 if sequence found
 	0 else */
 
-int isPresentInDico(pSequence seq, pTree dic []){
+int isPresentInDico(pSequence seq, pTree dic [], pTree toReturn){
 	if (seq == NULL)
+		toReturn = NULL;
 		return -1;
 	if (seq->succ == NULL)
+		toReturn;
 		return 1;
-	return isPresentInTree(seq->succ, dic[seq->elem]);
+	return isPresentInTree(seq->succ, dic[seq->elem, toReturn]);
 }
 
 
