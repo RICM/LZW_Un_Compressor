@@ -21,7 +21,7 @@ void compress(FILE *fr, FILE *fw){
 
     if(!feof(fr)){
 
-      printf("%d\n", c);
+      //printf("%d\n", c);
 
       // tmp = w.c
       tmp = NULL;
@@ -89,12 +89,12 @@ void compress(FILE *fr, FILE *fw){
         if(w->succ == NULL){
           writeBin(fw, w->elem, nBitsCode, 0);
           //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          //printf("On ecrit : \t\t\t%d\n", w->elem);
+          printf("On ecrit : \t\t\t%d\n", w->elem);
         }
         else{
           writeBin(fw, isPresentEncode(w, Dictionary)->code, nBitsCode, 0);
           //printf("W vaut apres insertion : "); print_sequence(w); printf("\n");
-          //printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
+          printf("On ecrit : \t\t\t%d\n", isPresentEncode(w, Dictionary)->code);
         }
 
         w = add_to_tail(NULL, c);
@@ -108,11 +108,19 @@ void compress(FILE *fr, FILE *fw){
         writeBin(fw, clean_dic, nBitsCode, 0);
         freeDictionary(Dictionary);
         initVar();
-        nBitsCode = 9;
         pred = -1;
         treePred = NULL;
         w = NULL;
         test = NULL;
+
+        if(!emptyReadBuffer()){
+          c = readLast(nBitsCode);
+          writeBin(fw, c, nBitsCode, 1);
+          printf("On ecrit final : \t\t\t%d\n", c);
+        }
+        flushBuffer();
+
+        nBitsCode = 9;
       }
     }
   }
@@ -145,11 +153,11 @@ void decompress(FILE *fr, FILE *fw){
 
   c = readBin(fr, nBitsCode);
   writeBin(fw, c, 8, 0);
-  printf("%d\n", c);
+  //printf("%d\n", c);
 
   int i = 0;
 
-  //printf("Caractere lu : \t%d\n", c);
+  printf("Caractere lu : \t%d\n", c);
   //printf("Caractere ecrit : \t\t%c\n", c);
 
   w = add_to_tail(NULL, c);
@@ -161,22 +169,30 @@ void decompress(FILE *fr, FILE *fw){
       nBitsCode++;
     else if(c == clean_dic){
       // dictionary reset
-      nBitsCode = 9;
       freeDictionary(Dictionary);
       initVar();
+
+      if(!emptyReadBuffer()){
+        c = readBin(fr, nBitsCode);
+        printf("Caractere lu final : \t%d\n", c);
+        writeBin(fw, c, 8, 0);
+      }
+      nBitsCode = 9;
+
+      flushBuffer();
 
       if(!feof(fr)){
         c = readBin(fr, nBitsCode);
         writeBin(fw, c, 8, 0);
-        printf("%d\n", c);
-        //printf("Caractere lu : \t%d\n", c);
+        //printf("%d\n", c);
+        printf("Caractere lu : \t%d\n", c);
         w = add_to_tail(NULL, c);
       }
     }
     else if(c != eof){
       //if(c == 1)
         //  printf("Coucou mon mignon !\t\t");
-      //printf("Caractere lu : \t%d\n", c);
+      printf("Caractere lu : \t%d\n", c);
       if(c <= 255)
         toWrite = add_to_tail(NULL, c);
       else{
@@ -200,7 +216,7 @@ void decompress(FILE *fr, FILE *fw){
         //printf("Caractere ecrit : \t\t%c\n", seqTmp->elem);
         writeBin(fw, seqTmp->elem, 8, 0);
         //if(c == 1)
-          printf("%d\n", seqTmp->elem);
+          //printf("%d\n", seqTmp->elem);
         /*if(seqTmp->elem == 31){
           i++;
           if(i == 17)
