@@ -5,8 +5,8 @@
 
 int main (int argc, char **argv){
 
-	FILE *filer;
-	FILE *filew;
+	//FILE *filer;
+	//FILE *filew;
 	FILE *filew2;
 	FILE *filew3;
 
