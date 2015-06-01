@@ -146,18 +146,18 @@ returns 1 if sequence found
 0 else
 */
 
-int isPresentInTree(pSequence seq, pTree t, pTree toReturn){
+int isPresentInTree(pSequence seq, pTree t, pTree *toReturn){
 	//printf("Est dans dico ?\n");
 	if (seq == NULL) {
-		toReturn = NULL;
-		return 0;
+		*toReturn = NULL;
+		return -1;
 	}
 	else {
 		pSequence w = seq;
 		pTree temp = t;
 		if((temp == NULL)||(temp->ascii > w->elem)){
-			toReturn == NULL;
-			return 0;
+			*toReturn = NULL;
+			return -1;
 		}
 		else {
 			//printf("Temp ascii %d \n", temp->ascii);
@@ -165,7 +165,7 @@ int isPresentInTree(pSequence seq, pTree t, pTree toReturn){
 			    /*if(w->succ == NULL){
 			    	return temp; // bug ici !
 			    }*/
-			    return isPresentInTree(w, temp->left);
+			    return isPresentInTree(w, temp->left, &(*toReturn));
 	  		}
 	  		else {
 			  	w=w->succ;
@@ -174,15 +174,14 @@ int isPresentInTree(pSequence seq, pTree t, pTree toReturn){
 			  		if (temp->right != NULL){
 			  			//printf("temp->right :\n");
 			  			//print_tree(temp->right, 0);
-			  			return isPresentInTree(w, temp->right);
-			  		}
-			  		else{
-			  			toReturn == NULL;
-			  			return 0;
+			  			return isPresentInTree(w, temp->right, &(*toReturn));
+			  		}else{
+			  			*toReturn = NULL;
+			  			return -1;
 			  		}
 			  	}
 			  	else {
-			  		toReturn = temp;
+			  		*toReturn = temp;
 			  		return 1;
 			  	}
 			}
@@ -194,14 +193,14 @@ int isPresentInTree(pSequence seq, pTree t, pTree toReturn){
 	returns 1 if sequence found
 	0 else */
 
-int isPresentInDico(pSequence seq, pTree dic [], pTree toReturn){
+int isPresentInDico(pSequence seq, pTree dic [], pTree *toReturn){
 	if (seq == NULL)
-		toReturn = NULL;
-		return 0;
+		*toReturn = NULL;
+		return -1;
 	if (seq->succ == NULL)
-		toReturn;
+		*toReturn = dic[seq->elem];
 		return 1;
-	return isPresentInTree(seq->succ, dic[seq->elem, toReturn]);
+	return isPresentInTree(seq->succ, dic[seq->elem], &(*toReturn));
 }
 
 
@@ -332,4 +331,11 @@ void freeDictionary(pTree dictionary[259]){
 	}
 	if(!b)
 		printf("Failed to free dictionary. Compression or decompression is compromised... Try again !\n");
+
+	pDecodeMap tmp = DecodeDictionary;
+	while(tmp != NULL){
+		freeSequenceList(&(tmp->sequence));
+		tmp = tmp->succ;
+	}
+	DecodeDictionary = NULL;
 }
