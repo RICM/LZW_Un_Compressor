@@ -6,10 +6,11 @@ void compress(FILE *fr, FILE *fw){
   pSequence w = NULL;
   pTree treePred = NULL; 
   pTree test = NULL;
-  uint8_t isInside = -1;
+  int isInside = -1;
   pSequence tmp;
   uint8_t c;
   int pred = -1;
+  int found = 0;
 
   initVar();
 
@@ -22,12 +23,6 @@ void compress(FILE *fr, FILE *fw){
 
     if(!feof(fr)){
 
-      /*if(nextCode == 4095){
-        printf("Last %d\n", c);
-        writeBin(fw, c, nBitsCode, 0);
-        nextCode++;
-      }
-      else{*/
       //printf("%d\n", c);
 
       // tmp = w.c
@@ -35,38 +30,42 @@ void compress(FILE *fr, FILE *fw){
       copySequence(w, &tmp);
       tmp = add_to_tail(tmp, c);
       //printf("w.c vaut : "); print_sequence(tmp); printf("\n");
-
       // if w as not already been found
-      if(treePred != NULL && pred > -1){
-        isInside = isPresentInTree(tmp, treePred, &treePred);
+      if(found){
+        //printf("First\n");
+        //print_tree(treePred, 0);
+        isInside = isPresentInTree(add_to_tail(add_to_tail(NULL, pred), c), treePred, &treePred);
       }
       else{
+        //printf("Second\n");
         isInside = isPresentInDico(tmp, Dictionary, &treePred);
+        //print_tree(treePred, 0);
+        //printf("%d\n", isInside);
       }
 
       //int test = isPresentInDico(tmp, Dictionary);
       //printf("%d\n", treePred);
       if(isInside != -1 || w == NULL){ // w.c est present dans le dictionnaire
+        //printf("On a trouvé la sequence : "); print_sequence(tmp); printf("\n\n");
         freeSequenceList(&w);
         w = NULL;
         copySequence(tmp, &w);
         w = tmp;
-        //printf("On a trouvé la sequence : "); print_sequence(w); printf("\n\n");
+        found = 1;
       }
       else{
         //printf("W vaut : "); print_sequence(w); printf("\n");
 
+        //pSequence toAdd = NULL;
+        //copySequence(tmp, &toAdd);
         //printf("To add : "); print_sequence(tmp); printf("\n");
-        pSequence toAdd = NULL;
-        copySequence(tmp, &toAdd);
-        test = add_to_dictionary(toAdd, Dictionary);
-        //printf("On a inséré dans le dico : %d\n", test->code);
+        test = add_to_dictionary(tmp, Dictionary);
 
         incrementNbits(nextCode-1, fw);
         
-        //if (test !=NULL){
-          //printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
-        //}
+        /*if (test !=NULL){
+          printf("On a inséré dans le dico : %d | %d\n",test->ascii,test->code);
+        }*/
 
         if(w->succ == NULL){
           writeBin(fw, w->elem, nBitsCode, 0);
@@ -81,13 +80,14 @@ void compress(FILE *fr, FILE *fw){
 
         w = add_to_tail(NULL, c);
         treePred = NULL;
+        found = 0;
         //printf("\n");
       }
       pred = c;
       
     }
 
-    if(nextCode == 4096){
+    if(nextCode == 16384){
       // dictionary reset
       c = readLast(nBitsCode);
       //printf("Cacacac %d\n", c);

@@ -194,12 +194,14 @@ int isPresentInTree(pSequence seq, pTree t, pTree *toReturn){
 	0 else */
 
 int isPresentInDico(pSequence seq, pTree dic [], pTree *toReturn){
-	if (seq == NULL)
+	if (seq == NULL){
 		*toReturn = NULL;
 		return -1;
-	if (seq->succ == NULL)
+	}
+	if (seq->succ == NULL){
 		*toReturn = dic[seq->elem];
 		return 1;
+	}
 	return isPresentInTree(seq->succ, dic[seq->elem], &(*toReturn));
 }
 
