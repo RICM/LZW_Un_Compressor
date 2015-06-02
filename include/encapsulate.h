@@ -1,3 +1,5 @@
+#ifndef _encapsulate_h
+#define _encapsulate_h
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -17,3 +19,4 @@ void fullEncapsulate(FILE **fr, FILE ** fw, char* fileName, char* fileNameOut);
 
 //Read the original name of the compressed file and recreate it.
 void fullDesencapsulate(FILE **fr, FILE ** fw, char* fileName);
+#endif

@@ -4,6 +4,7 @@
 
 #include "compression.h"
 #include "rle.h"
+#include "encapsulate.h"
 
 void usage (){
 	printf("correct usage : lzw [-d / -c]\n");
