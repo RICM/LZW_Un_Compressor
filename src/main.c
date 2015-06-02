@@ -89,8 +89,7 @@ int main (int argc, char **argv){
 				printf("RLE encoding ...\n");
 				run_length_encode(file , file2);
 				printf("End\n");
-
-			}else if (operation2 == NULL){
+			}else if (!operation2){
 				printf("LZW encoding ...\n");
 				compress(file, file2);
 				printf("End\n");
@@ -112,8 +111,10 @@ int main (int argc, char **argv){
 			    	printf("Running RLE decompression ...\n");
 			    	run_length_decode(file, file2);
 			    	printf("End\n");
-			    }else if(operation2 == NULL){
+			    }else if(!operation2){
+		    		printf("Running LZW decompression ...\n");
 		    		decompress(file, file2);
+		    		printf("End\n");
 		    	}else{
 		    		unknownArg(argv[1]);
 		    	}
