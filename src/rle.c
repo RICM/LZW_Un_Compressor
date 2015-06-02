@@ -49,9 +49,6 @@ void run_length_encode(FILE *in , FILE *out) {
 			break;
 		}
 	}
-
-	fclose(out);
-	fclose(in);
 }
 
 void run_length_decode(FILE *in , FILE *out) {
@@ -79,7 +76,4 @@ void run_length_decode(FILE *in , FILE *out) {
 			prev_char = current_char;
 		}
 	}
-
-	fclose(out);
-	fclose(in);
 }
