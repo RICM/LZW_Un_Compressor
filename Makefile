@@ -22,7 +22,7 @@ LIBS = -ltokenize
 #-------------------------------------------------
 all: $(EXEC)
 
-lzw: $(DIR_TGT)main.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
+lzw: $(DIR_TGT)main.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o $(DIR_TGT)encapsulate.o $(DIR_TGT)rle.o
 	@echo ------------- Generating $@ -------------
 	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
