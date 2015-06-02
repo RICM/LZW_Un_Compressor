@@ -3,17 +3,27 @@
 #include <string.h>
 
 #include "compression.h"
+#include "rle.h"
+#include "encapsulate.h"
 
 void usage (){
 	printf("correct usage : lzw [-d / -c]\n");
 }
 
 void usageCompression (){
-	printf("correct usage : lzw [-c] [fileName] [archiveName.lzw]\n");
+	printf("correct usage : lzw [-c] [fileName] [archiveName]\n");
+}
+
+void usageCompressionRle (){
+	printf("correct usage for RLE compression : lzw [-cl] [fileName] [archiveName]\n");
 }
 
 void usageDecompression (){
-	printf("correct usage : lzw [–d] [archiveName.lzw]\n");
+	printf("correct usage : lzw [–d] [archiveName]\n");
+}
+
+void usageDecompressionRle (){
+	printf("correct usage for RLE decompression : lzw [–dl] [archiveName]\n");
 }
 
 void extension(){
@@ -21,15 +31,24 @@ void extension(){
 	usageCompression();
 	printf("or\n");
 	usageDecompression();
+	printf("or\n");
+	usageCompressionRle();
+	printf("or\n");
+	usageDecompressionRle();
 }
 
 int main (int argc, char **argv){
 	/* -c/-d nomfichier */
 	char tiret = argv[1][0];
 	char operation = argv[1][1];
+	char operation2 = argv[1][2];
 	FILE *file, *file2;
-	if (tiret=='-' && operation=='c' && (argc != 4 && argc != 3)){
+	if ((tiret=='-' && operation=='c') /*|| (tiret=='-' && operation=='c' && operation2=='l')*/  && (argc != 4 && argc != 3)){
 		usageCompression();
+		return -1;
+	}
+	if ((tiret=='-' && operation=='c' && operation2=='l')&& (argc != 4 && argc != 3)){
+		usageCompressionRle();
 		return -1;
 	}
 	if (tiret=='-' && operation=='d' && (argc != 4 && argc != 3)){
@@ -45,17 +64,17 @@ int main (int argc, char **argv){
 			/*
 			Compression treatment 
 			*/
-			if (strstr(argv[3], ".lzw") != NULL) {
-				file = fopen(argv[2], "rb");
-				file2 = fopen(argv[3], "wb");
-				if(!file || !file2){
-			        fprintf(stderr, "Error : File error / inaccessible.\n");
-			        return -1;
-			    }
-				compress(file, file2);
+			fullEncapsulate(&file, &file2, argv[2], argv[3]);
+			if(!file || !file2){
+		        fprintf(stderr, "Error : File error / inaccessible.\n");
+		        return -1;
+		    }
+		    printf("Running compression...\n");
+			if (operation2 == 'l'){
+				run_length_encode(file , file2);
+
 			}else{
-				extension();
-				return -1;
+				compress(file, file2);
 			}
 			break;
 		case 'd' :
@@ -63,12 +82,14 @@ int main (int argc, char **argv){
 			Decompression treatment
 			*/
 			if (strstr(argv[2], ".lzw") != NULL) {
-				file = fopen(argv[2], "rb");
-				char *filename2 = "FILENAME2";
-				file2 = fopen(filename2, "wb");
+				fullDesencapsulate(&file, &file2, argv[2]);
 				if(!file || !file2){
 			        fprintf(stderr, "Error : File error / inaccessible.\n");
 			        return 1;
+			    }
+			    printf("Running decompression ...\n");
+			    if (operation2 == 'l'){
+			    	run_length_decode(file, file2);
 			    }
 		    	decompress(file, file2);
 		    }else{

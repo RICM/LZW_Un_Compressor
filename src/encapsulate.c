@@ -75,12 +75,15 @@ void fullEncapsulate(FILE **fr, FILE ** fw, char* fileName, char* fileNameOut){
 
 	//Opening of the output file
 	char tmp[100];
-	memcpy(tmp,fileNameOut,strlen(fileNameOut));
-	strncat(tmp,".lzw",strlen(fileNameOut)+4);
+	memcpy(tmp,fileNameOut,strlen(fileNameOut)+1);
+
+	char* baseN = basename(fileName); //Recuperation du nom du fichier après le dernier "slash"
+
+	strncat(tmp,".lzw",strlen(fileNameOut)+3);
 	*fw = fopen(tmp,"wb");
-	for (int i = 0; i < strlen(fileName); ++i)
+	for (int i = 0; i < strlen(baseN); ++i)
 	{
-		writeBin(*fw,*(fileName+i),8,0);
+		writeBin(*fw,*(baseN+i),8,0);
 	}
 	writeBin(*fw,255,8,0);
 }
@@ -100,10 +103,10 @@ void fullDesencapsulate(FILE **fr, FILE ** fw, char* fileName){
 	while (octo != 255 && j < 100 );
 
 	tmp[j-1] = '\0';
-	for (int i = 0; i < strlen(tmp); ++i)
+	/*for (int i = 0; i < strlen(tmp); ++i)
 	{
-		//printf("%c\n", tmp[i]);
-	}
+		printf("%c\n", tmp[i]);
+	}*/
 
 	*fw = fopen(tmp,"wb");
 }
