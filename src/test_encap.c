@@ -22,6 +22,7 @@ int main (int argc, char **argv){
 	fclose(filew3);*/
 
 	fullEncapsulate(&filer, &filew, argv[1], argv[2]);
+	printf("Avant close\n");
 	fclose(filer);
 	fclose(filew);
 

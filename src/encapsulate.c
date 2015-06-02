@@ -79,8 +79,12 @@ void fullEncapsulate(FILE **fr, FILE ** fw, char* fileName, char* fileNameOut){
 
 	char* baseN = basename(fileName); //Recuperation du nom du fichier après le dernier "slash"
 
-	strncat(tmp,".lzw",strlen(fileNameOut)+3);
+	if (strstr(tmp,".lzw") == NULL)
+	{
+		strncat(tmp,".lzw",strlen(fileNameOut)+3);
+	}
 	*fw = fopen(tmp,"wb");
+	printf("%d\n", strlen(baseN));
 	for (int i = 0; i < strlen(baseN); ++i)
 	{
 		writeBin(*fw,*(baseN+i),8,0);
