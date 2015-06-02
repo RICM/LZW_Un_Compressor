@@ -1,3 +1,6 @@
+#ifndef _COMPRESSION_H
+#define _COMPRESSION_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -22,3 +25,5 @@ void decompress(FILE *fr, FILE *fw);
   and increment nBitCode if so
 */
 void incrementNbits(uint16_t value, FILE *fw);
+
+#endif
