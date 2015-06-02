@@ -1,3 +1,6 @@
+#ifndef _SEQUENCE_H
+#define _SEQUENCE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -20,3 +23,5 @@ void copySequence(pSequence seq, pSequence *newSeq);
 void freeSequenceList(pSequence *seq);
 
 int sizeSequence(pSequence seq);
+
+#endif
