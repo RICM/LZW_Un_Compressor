@@ -24,56 +24,56 @@ all: $(EXEC)
 
 lzw: $(DIR_TGT)main.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 bindump: $(DIR_TGT)bindump.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_sequence: $(DIR_TGT)test_sequence.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_tree: $(DIR_TGT)test_tree.o $(DIR_TGT)tree.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)tree.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_dic: $(DIR_TGT)test_dic.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_binrw: $(DIR_TGT)test_binrw.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_compress: $(DIR_TGT)test_compress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_decompress: $(DIR_TGT)test_decompress.o $(DIR_TGT)compression.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o $(DIR_TGT)binrw.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)compression.o $(DIR_TGT)binrw.o $(DIR_TGT)dictionary.o $(DIR_TGT)tree.o $(DIR_TGT)sequence.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_encap: $(DIR_TGT)test_encap.o $(DIR_TGT)binrw.o $(DIR_TGT)encapsulate.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)binrw.o $(DIR_TGT)encapsulate.o
+	$(CC) -o $(DIR_TGT)$@ $^
 	@echo -e
 
 test_rle_encode: $(DIR_TGT)test_rle_encode.o $(DIR_TGT)rle.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)rle.o
+	$(CC) -o $(DIR_TGT)$@ $^
 
 test_rle_decode: $(DIR_TGT)test_rle_decode.o $(DIR_TGT)rle.o
 	@echo ------------- Generating $@ -------------
-	$(CC) -o $(DIR_TGT)$@ $< $(DIR_TGT)rle.o
+	$(CC) -o $(DIR_TGT)$@ $^
 
 #-------------------------------------------------
 #                   DEPENDENCIES
