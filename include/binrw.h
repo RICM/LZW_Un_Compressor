@@ -1,3 +1,6 @@
+#ifndef _BINRW_H
+#define _BINRW_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -24,3 +27,5 @@ void printBufferRead();
 void printBufferReadPred();
 
 void flushBufferRead();
+
+#endif
