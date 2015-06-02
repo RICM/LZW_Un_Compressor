@@ -76,15 +76,15 @@ void fullEncapsulate(FILE **fr, FILE ** fw, char* fileName, char* fileNameOut){
 	//Opening of the output file
 	char tmp[100];
 	memcpy(tmp,fileNameOut,strlen(fileNameOut)+1);
-
+	//printf("basename incomingd\n");
 	char* baseN = basename(fileName); //Recuperation du nom du fichier après le dernier "slash"
-
+	//printf("BASENAME BITHC %s\n", baseN);
 	if (strstr(tmp,".lzw") == NULL)
 	{
 		strncat(tmp,".lzw",strlen(fileNameOut)+3);
 	}
 	*fw = fopen(tmp,"wb");
-	printf("%d\n", strlen(baseN));
+	//printf("%d\n", strlen(baseN));
 	for (int i = 0; i < strlen(baseN); ++i)
 	{
 		writeBin(*fw,*(baseN+i),8,0);

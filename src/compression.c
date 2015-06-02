@@ -138,7 +138,6 @@ void compress(FILE *fr, FILE *fw){
     printf("%d\n", eof);
 
   freeSequenceList(&w);
-  freeSequenceList(&tmp);
   freeDictionary();
 }
 
