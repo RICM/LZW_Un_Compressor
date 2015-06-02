@@ -205,23 +205,6 @@ int isPresentInDico(pSequence seq, pTree dic [], pTree *toReturn){
 	return isPresentInTree(seq->succ, dic[seq->elem], &(*toReturn));
 }
 
-
-pTree addToDictionnary (pSequence seq, pTree dic[]){
-	pSequence elemToAdd = seq;
-	pSequence seqPrefixe = NULL;
-	int size = sizeSequence(seq);
-	for (int i = 0; i < size; ++i)
-	{
-		elemToAdd = elemToAdd->succ;
-	}
-	//elemToAdd pointe sur l'élément de la séquence qui n'est pas présent dans le dico
-	while (seqPrefixe != elemToAdd){
-		seqPrefixe = add_to_tail(seqPrefixe, elemToAdd->elem);
-	}
-
-	return NULL;
-}
-
 /* Function used to insert an entity in a tree */
 pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 	pTree treeToReturn = treeToInsert;
@@ -248,9 +231,6 @@ pTree insertInTree(pTree treeToInsert, uint8_t toInsert){
 
 /* Function used to insert a sequence */
 pTree add_to_dictionary(pSequence seq, pTree dic[]){
-	//printf("nextCode = %d\n", nextCode);
-	//print_sequence(seq);
-	//print_tree(dic[0], 0);
 
 	DecodeDictionary = addToDecodeMap(seq, nextCode, DecodeDictionary);
 
@@ -258,8 +238,10 @@ pTree add_to_dictionary(pSequence seq, pTree dic[]){
 		//printf("seq current = %d", seq->elem);
 		return dic[seq->elem];
 	}
+
 	pTree toTest = isPresentEncode(seq, dic);
 	pTree save = NULL;
+
 	if (toTest != NULL){
 		return toTest;
 	}

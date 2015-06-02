@@ -30,6 +30,7 @@ typedef DecodeMap *pDecodeMap;
 pDecodeMap DecodeDictionary;
 
 int numberElemDic(pTree dic[]);
+pTree insertInTree(pTree treeToInsert, uint8_t toInsert);
 pTree add_to_dictionary(pSequence seq, pTree dic[]);
 pTree isPresentEncode(pSequence w, pTree dic[]);
 
