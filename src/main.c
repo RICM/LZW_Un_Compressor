@@ -7,11 +7,11 @@
 #include "encapsulate.h"
 
 void usage (){
-	printf("LZW correct usage : lzw [-d / -c]\n");
+	printf("LZW correct usage : lzw [-d / -c] [fileName]\n");
 }
 
 void usageRle (){
-	printf("RLE correct usage : lzw [-dr / -cr]\n");
+	printf("RLE correct usage : lzw [-dr / -cr] [fileName]\n");
 }
 
 void usageCompression (){
@@ -50,6 +50,10 @@ void unknownArg(char* argv){
 
 int main (int argc, char **argv){
 	/* -c/-d nomfichier */
+	if (argc < 2){
+		usage();
+		return -1;
+	}
 	char tiret = argv[1][0];
 	char operation = argv[1][1];
 	char operation2 = argv[1][2];
@@ -80,6 +84,10 @@ int main (int argc, char **argv){
 			/*
 			Compression treatment 
 			*/
+			if (argc<4){
+				usageCompression();
+				return -1;
+			}
 			fullEncapsulate(&file, &file2, argv[2], argv[3]);
 			if(!file || !file2){
 		        fprintf(stderr, "Error : File error / inaccessible.\n");
@@ -101,6 +109,10 @@ int main (int argc, char **argv){
 			/*
 			Decompression treatment
 			*/
+			if (argc < 3){
+				usageDecompression();
+				return -1;
+			}
 			if (strstr(argv[2], ".lzw") != NULL) {
 				fullDesencapsulate(&file, &file2, argv[2]);
 				if(!file || !file2){
